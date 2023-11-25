@@ -1,0 +1,36 @@
+<mxfile host="app.diagrams.net" modified="2023-10-18T23:49:31.466Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 OPR/102.0.0.0" etag="NrCydWjqj5Nu_3GR7gxP" version="22.0.4" type="device">
+  <diagram name="Страница — 1" id="wr9BzwTeT0dEIzvmktz_">
+    <mxGraphModel dx="539" dy="981" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="LoySCylnfrxSFEiBKLFB-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="LoySCylnfrxSFEiBKLFB-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="340" y="225" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="LoySCylnfrxSFEiBKLFB-1" value="Engine Lib&lt;br&gt;C++, X64" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="100" y="150" width="150" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="LoySCylnfrxSFEiBKLFB-5" value="Level Editor C#, WPF" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="530" y="145" width="140" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="LoySCylnfrxSFEiBKLFB-8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="LoySCylnfrxSFEiBKLFB-7" target="LoySCylnfrxSFEiBKLFB-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="LoySCylnfrxSFEiBKLFB-7" value="DLL" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="190" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="LoySCylnfrxSFEiBKLFB-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="LoySCylnfrxSFEiBKLFB-9" target="LoySCylnfrxSFEiBKLFB-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="LoySCylnfrxSFEiBKLFB-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="LoySCylnfrxSFEiBKLFB-9" target="LoySCylnfrxSFEiBKLFB-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="LoySCylnfrxSFEiBKLFB-9" value="Game Code&lt;br&gt;C++" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="115" y="430" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
