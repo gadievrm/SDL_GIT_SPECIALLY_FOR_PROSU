@@ -6,11 +6,11 @@ and may not be redistributed without written permission.*/
 
 
 //Using SDL and standard IO
+#define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <iostream>
 
-#include <windows.h>
 #include <malloc.h>
 
 #include "Graphics.h"
@@ -27,6 +27,9 @@ using namespace std;
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 
+#define TARGET_FPS (60)
+#define TARGET_SPF (1/60)
+
 
 
 bool aKeyPressed = false;
@@ -38,18 +41,11 @@ SDL_Renderer *renderer;
 
 Player player;
 
-
-
-
-
 int initAllOfThisShit(){
 
 	SDL_Init(SDL_INIT_EVERYTHING);
 	//The window we'll be rendering to
 	SDL_Window* window = NULL;
-	
-	//The surface contained by the window
-	SDL_Surface* screenSurface = NULL;
 
 	//Initialize SDL
 	if( SDL_Init( SDL_INIT_EVERYTHING ) < 0 )
@@ -66,15 +62,9 @@ int initAllOfThisShit(){
 	return 0;
 }
 
-
-
-int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd )
-{
+int main() {
 	//The window we'll be rendering to
 	SDL_Window* window = NULL;
-	
-	//The surface contained by the window
-	SDL_Surface* screenSurface = NULL;
 
 	if (initAllOfThisShit() != 0) return 1;
 	
@@ -86,16 +76,36 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		return 3;
 	}
 
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	screenSurface = SDL_GetWindowSurface( window );
-	image_t *background  = imageLoad("data//environment//Background//Back.png", renderer);
-	player.setImage(imageLoad("data//sprites//player//idle//playeridle.png", renderer));
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	SDL_RenderSetVSync(renderer, 1);
+	image_t *background  = imageLoad("data/environment/Background/back.png", renderer);
+	player.setImage(imageLoad("data/sprites/player/idle/playerIdle.png", renderer));
 	player.setPosX(SCREEN_WIDTH/2 - player.getImage()->w / 2);
 	player.setPosY(SCREEN_HEIGHT/2 - player.getImage()->h /2);
 	bool quit = false;
+	uint64_t ticks = SDL_GetTicks64();
+	int framesCounted = 0;
+
+	Uint64 NOW = SDL_GetPerformanceCounter();
+	Uint64 LAST = 0;
+	Uint64 performanceFrequency = SDL_GetPerformanceFrequency();
+	double deltaTime = 0;
+
 	while(!quit){
-		SDL_Event e;
+		LAST = NOW;
+		NOW = SDL_GetPerformanceCounter();
+
+		deltaTime = (NOW - LAST)*1000.0 / performanceFrequency;
+
+		if (SDL_GetTicks64() - ticks > 1000) {
+			cout << "FPS: " << framesCounted << endl;
+			framesCounted = 0;
+			ticks = SDL_GetTicks64();
+		}
+
+		framesCounted++;
 		
+		SDL_Event e;
 		while( SDL_PollEvent( &e ) ){ 
 			if (e.type == SDL_KEYDOWN){
 				int scancode = e.key.keysym.scancode;
@@ -116,7 +126,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 			}	 
 		}
 		
-		player.logic();
+		player.logic(deltaTime);
 
 		SDL_RenderCopy(renderer, background->tex, NULL, NULL);
 		player.draw();

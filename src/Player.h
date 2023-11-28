@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "Graphics.h"
 
-class Player : public  Entity {
+class Player : public Entity {
     private:
         float velX;
         float velY;
@@ -16,7 +16,7 @@ class Player : public  Entity {
         void setImage(image_t *new_image);
 
         virtual bool isDrawable();
-        virtual void logic();
+        virtual void logic(double dt);
         virtual void draw();
 
 };
