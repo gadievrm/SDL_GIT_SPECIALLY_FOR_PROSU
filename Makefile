@@ -1,25 +1,36 @@
-BUILD_DIR = build
-SOURCE_DIR = src
+TARGET = build/main.exe
+
+SOURCE_DIR  = src
 INCLUDE_DIR = src/include
 LIBRARY_DIR = src/lib
-TARGET = $(BUILD_DIR)/main.exe
-OBJ = $(addsuffix .o,$(basename $(wildcard $(SOURCE_DIR)/*.cpp))) # All .cpp files in src/ but name ending with .o instead of .cpp
-LFLAGS = $(LIBS) # -mwindows ## To disable console
+
 LIBS = -L$(LIBRARY_DIR) -lSDL2 -lSDL2_Image -lSDL2Main
+LFLAGS = $(LIBS) # -mwindows ## To disable console
 CFLAGS = -I$(INCLUDE_DIR) $(LIBS)
 
+
+OBJ = $(addsuffix .o,$(basename $(wildcard $(SOURCE_DIR)/*.cpp))) # All .cpp files in src/ but name ending with .o instead of .cpp
+
+#### File conversion rules ####
+## .cpp -> .o
 %.o: %.cpp
 	g++ $(CFLAGS) -c $< -o $@
 
+#### Main ####
 $(TARGET): $(OBJ) Makefile
 	echo $(OBJ)
 	g++ -o $(TARGET) $(SOURCE_DIR)/*.o $(LFLAGS)
 
+
+##### Commands ####
+## Remove all temporary build files
 clean:
 	rm -f $(SOURCE_DIR)/*.o
 	rm -f $(TARGET)
 
-run:
+## Start the program
+run: $(TARGET)
 	(cd $(dir $(TARGET)); ./$(notdir $(TARGET)))
 
+## (Default)
 all: $(TARGET)
