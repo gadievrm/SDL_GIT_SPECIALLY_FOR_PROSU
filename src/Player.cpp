@@ -1,14 +1,15 @@
 #include <cmath>
 #include "Player.h"
-#include "Main.h"
 
 const int PLAYER_WIDTH = 20;
 const int PLAYER_HEIGHT = 23;
 
-
-
 const float moveSpeed = 0.004;
 const float friction = 0.995;
+
+Player::Player(Game *game) {
+	this->game = game;
+}
 
 bool Player::isDrawable() {
 	return true;
@@ -20,18 +21,18 @@ bool Player::getFlipX(){
 
 void Player::logic(double dt)
 { 
-	if (aKeyPressed) {
+	if (getGame()->getAKeyPressed()) {
 		this->flipX = true;
 		this->velX -= moveSpeed * dt;
 	}
-	if (dKeyPressed) {
+	if (getGame()->getDKeyPressed()) {
 		this->flipX = false;
 		this->velX += moveSpeed * dt;
 	}
-	if (wKeyPressed) {
+	if (getGame()->getWKeyPressed()) {
 		this->velY -= moveSpeed * dt; 
 	}
-	if(sKeyPressed) {
+	if (getGame()->getSKeyPressed()) {
 		this->velY += moveSpeed * dt;
 	}
 
@@ -40,6 +41,14 @@ void Player::logic(double dt)
 
 	this->velX *= pow(friction, dt);
 	this->velY *= pow(friction, dt);
+}
+
+Game *Player::getGame() {
+	return game;
+}
+
+void Player::setGame(Game *newgame) {
+	game = newgame;
 }
 
 image_t *Player::getImage (){
@@ -51,5 +60,5 @@ void Player::setImage(image_t *new_image) {
 }
 
 void Player::draw() {
-	imageDraw(renderer, this->image, this->getPosX(), this->getPosY(), this->getFlipX());
+	imageDraw(getGame()->getRenderer(), this->image, this->getPosX(), this->getPosY(), this->getFlipX());
 }

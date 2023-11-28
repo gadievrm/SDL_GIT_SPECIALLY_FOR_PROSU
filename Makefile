@@ -1,24 +1,25 @@
 BUILD_DIR = build
 SOURCE_DIR = src
-TARGET_NAME = main.exe
-TARGET_DIR = $(BUILD_DIR)
-TARGET = $(TARGET_DIR)/$(TARGET_NAME)
-OBJ = $(addprefix $(SOURCE_DIR)/,main.o Entity.o Graphics.o Player.o)
-LFLAGS = $(LIBS)
-LIBS = -Lsrc/lib -lSDL2 -lSDL2_Image -lSDL2Main
-CFLAGS = -Isrc/include $(LIBS)
+INCLUDE_DIR = src/include
+LIBRARY_DIR = src/lib
+TARGET = $(BUILD_DIR)/main.exe
+OBJ = $(addsuffix .o,$(basename $(wildcard $(SOURCE_DIR)/*.cpp))) # All .cpp files in src/ but name ending with .o instead of .cpp
+LFLAGS = $(LIBS) # -mwindows ## To disable console
+LIBS = -L$(LIBRARY_DIR) -lSDL2 -lSDL2_Image -lSDL2Main
+CFLAGS = -I$(INCLUDE_DIR) $(LIBS)
 
 %.o: %.cpp
 	g++ $(CFLAGS) -c $< -o $@
 
 $(TARGET): $(OBJ) Makefile
+	echo $(OBJ)
 	g++ -o $(TARGET) $(SOURCE_DIR)/*.o $(LFLAGS)
 
 clean:
-	rm -f src/*.o
+	rm -f $(SOURCE_DIR)/*.o
 	rm -f $(TARGET)
 
 run:
-	(cd $(TARGET_DIR); ./$(TARGET_NAME))
+	(cd $(dir $(TARGET)); ./$(notdir $(TARGET)))
 
 all: $(TARGET)
