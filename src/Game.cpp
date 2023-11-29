@@ -47,9 +47,9 @@ void Game::start() {
 	performanceFrequency = SDL_GetPerformanceFrequency();
 
 	// Scene
-	background = imageLoad("data/environment/Background/back.png", renderer);
+	background = imageLoad("data/gfx/environment/bg/back.png", renderer);
     mainPlayer = new Player(this);
-	mainPlayer->setImage(imageLoad("data/sprites/player/idle/playerIdle.png", renderer));
+	mainPlayer->setImage(imageLoad("data/gfx/sprites/player/idle/player-idle-1.png", renderer));
 	mainPlayer->setPosX(SCREEN_WIDTH/2  - mainPlayer->getImage()->w / 2);
 	mainPlayer->setPosY(SCREEN_HEIGHT/2 - mainPlayer->getImage()->h / 2);
 
