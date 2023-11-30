@@ -24,6 +24,6 @@ class Player : public Entity {
 
         virtual bool isDrawable();
         virtual void logic(double dt);
-        virtual void draw();
+        virtual void draw(Graphics *graphics);
 
 };

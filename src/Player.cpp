@@ -68,6 +68,6 @@ void Player::setImage(image_t *new_image) {
     this->image = new_image;
 }
 
-void Player::draw() {
-    imageDraw(getGame()->getRenderer(), this->image, this->getPosX(), this->getPosY(), this->getFlipX());
+void Player::draw(Graphics *graphics) {
+    graphics->drawImage(this->image, this->getPosX(), this->getPosY(), this->getFlipX());
 }

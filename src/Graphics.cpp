@@ -2,7 +2,18 @@
 #include "Graphics.h"
 #include <SDL2/SDL_image.h>
 
-image_t *imageLoad (const char *path, SDL_Renderer *renderer){
+Graphics* Graphics::init(SDL_Window *window) {
+
+	Graphics *graphics = new Graphics();
+	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	SDL_RenderSetVSync(renderer, 1);
+
+	graphics->renderer = renderer;
+
+	return graphics;
+}
+
+image_t *Graphics::loadImage(const char *path) {
 	SDL_Texture *texture;
 	SDL_Surface *textureSurface = NULL;
 	textureSurface = IMG_Load(path);
@@ -24,8 +35,16 @@ image_t *imageLoad (const char *path, SDL_Renderer *renderer){
 	return result;
 }
 
-void imageDraw (SDL_Renderer *rnd, image_t *target, int posX, int posY, bool flip){
+void Graphics::drawImageFullscreen(image_t *target) {
+	SDL_RenderCopy(renderer, target->tex, NULL, NULL);
+}
+
+void Graphics::drawImage(image_t *target, int posX, int posY, bool flip) {
 	SDL_Rect dstRect {.x = posX, .y = posY, .w = target->w, .h = target->h};
 
-	SDL_RenderCopyEx(rnd, target->tex, NULL, &dstRect, 0, NULL, flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
-};
+	SDL_RenderCopyEx(renderer, target->tex, NULL, &dstRect, 0, NULL, flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+}
+
+void Graphics::present() {
+	SDL_RenderPresent(renderer);
+}

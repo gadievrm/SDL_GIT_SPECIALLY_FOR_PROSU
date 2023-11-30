@@ -11,9 +11,9 @@ class Game {
 private:
     std::vector<Entity*> entities;
     SDL_Window* window;
-    SDL_Renderer* renderer;
     Player* mainPlayer;
     image_t* background;
+    Graphics* graphics;
     Input* input;
     bool inited;
     bool quit;
@@ -32,6 +32,5 @@ public:
     void start();
     bool run();
 
-    SDL_Renderer* getRenderer();
     Input* getInput();
 };

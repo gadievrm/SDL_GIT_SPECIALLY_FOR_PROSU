@@ -15,8 +15,7 @@ Game* Game::init() {
         return NULL;
     }
 
-    game->renderer = SDL_CreateRenderer(game->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    SDL_RenderSetVSync(game->renderer, 1);
+    game->graphics = Graphics::init(game->window);
 
     game->input = new Input();
 
@@ -28,7 +27,7 @@ Game* Game::init() {
 Game::~Game() {
     if (!inited) return;
 
-    SDL_DestroyRenderer(renderer);
+    // SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 }
 
@@ -44,9 +43,9 @@ void Game::start() {
     frametime_last = 0;
     performanceFrequency = SDL_GetPerformanceFrequency();
 
-    background = imageLoad("data/gfx/environment/bg/back.png", renderer);
+    background = graphics->loadImage("data/gfx/environment/bg/back.png");
     mainPlayer = new Player(this);
-    mainPlayer->setImage(imageLoad("data/gfx/sprites/player/idle/player-idle-1.png", renderer));
+    mainPlayer->setImage(graphics->loadImage("data/gfx/sprites/player/idle/player-idle-1.png"));
     mainPlayer->setPosX(SCREEN_WIDTH / 2 - mainPlayer->getImage()->w / 2);
     mainPlayer->setPosY(SCREEN_HEIGHT / 2 - mainPlayer->getImage()->h / 2);
 
@@ -84,18 +83,14 @@ bool Game::run() {
         entity->logic(deltaTime);
     }
 
-    SDL_RenderCopy(renderer, background->tex, NULL, NULL);
+    graphics->drawImageFullscreen(background);
     for (auto entity : entities) {
-        entity->draw();
+        entity->draw(graphics);
     }
 
-    SDL_RenderPresent(renderer);
+    graphics->present();
 
     return !quit;
-}
-
-SDL_Renderer* Game::getRenderer() {
-    return renderer;
 }
 
 Input* Game::getInput() {
