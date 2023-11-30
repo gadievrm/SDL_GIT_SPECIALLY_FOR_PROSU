@@ -16,11 +16,8 @@ and may not be redistributed without written permission.*/
 using namespace std;
 
 int initAllOfThisShit(){
-
-	SDL_Init(SDL_INIT_EVERYTHING);
-
 	//Initialize SDL
-	if(SDL_Init( SDL_INIT_EVERYTHING ) < 0)
+	if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
 		cout <<"SDL could not initialize! SDL_Error:"<< SDL_GetError() << endl;
 		return 1;

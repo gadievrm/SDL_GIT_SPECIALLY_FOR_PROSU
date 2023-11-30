@@ -71,7 +71,7 @@ bool Game::run() {
 
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
-        input.processInput(e);
+        if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP) input.processInput(e);
 
         if ((e.key.keysym.scancode == SDL_SCANCODE_ESCAPE) || e.type == SDL_QUIT) {
             quit = true;
