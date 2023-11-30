@@ -10,11 +10,9 @@ private:
 
 public:
     Input();
-    void processInput(SDL_Event& e);
+    void processKeyEvent(SDL_Event& e);
     bool getAKeyPressed();
     bool getWKeyPressed();
     bool getSKeyPressed();
     bool getDKeyPressed();
 };
-
-extern Input input;

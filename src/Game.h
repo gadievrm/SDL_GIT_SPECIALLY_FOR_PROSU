@@ -14,6 +14,7 @@ private:
     SDL_Renderer* renderer;
     Player* mainPlayer;
     image_t* background;
+    Input* input;
     bool inited;
     bool quit;
 
@@ -32,4 +33,5 @@ public:
     bool run();
 
     SDL_Renderer* getRenderer();
+    Input* getInput();
 };

@@ -1,10 +1,8 @@
 #include "Input.h"
 
-Input input;
-
 Input::Input() : aKeyPressed(false), wKeyPressed(false), sKeyPressed(false), dKeyPressed(false) {}
 
-void Input::processInput(SDL_Event& e) {
+void Input::processKeyEvent(SDL_Event& e) {
     bool pressed = e.type == SDL_KEYDOWN;
     int scancode = e.key.keysym.scancode;
 

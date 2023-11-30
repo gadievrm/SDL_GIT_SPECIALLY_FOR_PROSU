@@ -21,18 +21,20 @@ bool Player::getFlipX() {
 }
 
 void Player::logic(double dt) {
-    if (input.getAKeyPressed()) {
+    Input *input = getGame()->getInput();
+
+    if (input->getAKeyPressed()) {
         this->flipX = true;
         this->velX -= moveSpeed * dt;
     }
-    if (input.getDKeyPressed()) {
+    if (input->getDKeyPressed()) {
         this->flipX = false;
         this->velX += moveSpeed * dt;
     }
-    if (input.getWKeyPressed()) {
+    if (input->getWKeyPressed()) {
         this->velY -= moveSpeed * dt;
     }
-    if (input.getSKeyPressed()) {
+    if (input->getSKeyPressed()) {
         this->velY += moveSpeed * dt;
     }
 

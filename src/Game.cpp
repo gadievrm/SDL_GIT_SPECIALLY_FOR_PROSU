@@ -18,6 +18,8 @@ Game* Game::init() {
     game->renderer = SDL_CreateRenderer(game->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     SDL_RenderSetVSync(game->renderer, 1);
 
+    game->input = new Input();
+
     game->inited = true;
 
     return game;
@@ -71,7 +73,7 @@ bool Game::run() {
 
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
-        if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP) input.processInput(e);
+        if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP) input->processKeyEvent(e);
 
         if ((e.key.keysym.scancode == SDL_SCANCODE_ESCAPE) || e.type == SDL_QUIT) {
             quit = true;
@@ -94,4 +96,8 @@ bool Game::run() {
 
 SDL_Renderer* Game::getRenderer() {
     return renderer;
+}
+
+Input* Game::getInput() {
+    return input;
 }
