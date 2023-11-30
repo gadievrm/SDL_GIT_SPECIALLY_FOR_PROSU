@@ -1,4 +1,5 @@
 #include <cmath>
+#include <iostream>
 #include "Player.h"
 #include "Input.h"  // Добавлен новый заголовочный файл
 
@@ -10,6 +11,12 @@ const float friction = 0.995;
 
 Player::Player(Game *game) {
     this->game = game;
+
+    // Важно ставить значения по-умолчанию
+    // Иначе в значениях пермененных - мусор
+    velX = velY = 0.0;
+    flipX = false;
+    image = NULL;
 }
 
 bool Player::isDrawable() {

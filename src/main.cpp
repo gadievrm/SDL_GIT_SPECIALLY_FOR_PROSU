@@ -41,6 +41,7 @@ int main() {
 	}
 	game->start();
 	while (game->run()) {}
+	delete game;
 
 	//Quit SDL subsystems
 	IMG_Quit();
