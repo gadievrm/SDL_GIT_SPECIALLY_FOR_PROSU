@@ -13,13 +13,17 @@ Graphics* Graphics::init(SDL_Window *window) {
 	return graphics;
 }
 
+Graphics::~Graphics() {
+	SDL_DestroyRenderer(renderer);
+}
+
 image_t *Graphics::loadImage(const char *path) {
 	SDL_Texture *texture;
 	SDL_Surface *textureSurface = NULL;
 	textureSurface = IMG_Load(path);
 
 	if (textureSurface == NULL) {
-		std::cout << IMG_GetError() << std::endl;
+		std::cerr << IMG_GetError() << std::endl;
 		return NULL;
 	}
 

@@ -19,12 +19,12 @@ int initAllOfThisShit(){
 	//Initialize SDL
 	if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
-		cout <<"SDL could not initialize! SDL_Error:"<< SDL_GetError() << endl;
+		cerr <<"SDL could not initialize! SDL_Error:"<< SDL_GetError() << endl;
 		return 1;
 	}
 	
 	if (IMG_Init(IMG_INIT_PNG) == 0) {
-		cout << "Error SDL2_image Initialization"<< endl;
+		cerr << "Error SDL2_image Initialization"<< endl;
 		return 2;
 	}
 
@@ -36,7 +36,7 @@ int main() {
 
 	Game *game = Game::init();
 	if (game == NULL) {
-		cout << "Could not init game!" << endl;
+		cerr << "Could not init game!" << endl;
 		return 3; 
 	}
 	game->start();

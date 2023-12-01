@@ -20,4 +20,5 @@ class Graphics {
 		void drawImageFullscreen(image_t *target);
 		void drawImage(image_t *target, int posX, int posY, bool flip = false);
 		void present();
+		~Graphics();
 };

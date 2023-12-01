@@ -10,7 +10,7 @@ Game* Game::init() {
     game->window = SDL_CreateWindow("Almost Valorant", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 
     if (game->window == NULL) {
-        std::cout << "Window could not be created! SDL_Error:" << SDL_GetError() << std::endl;
+        std::cerr << "Window could not be created! SDL_Error:" << SDL_GetError() << std::endl;
         delete game;
         return NULL;
     }
@@ -25,7 +25,7 @@ Game* Game::init() {
 Game::~Game() {
     if (!inited) return;
 
-    // SDL_DestroyRenderer(renderer);
+    delete graphics;
     SDL_DestroyWindow(window);
 }
 
