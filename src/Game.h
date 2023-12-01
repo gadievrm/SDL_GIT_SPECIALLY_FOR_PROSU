@@ -14,7 +14,7 @@ private:
     Player* mainPlayer;
     image_t* background;
     Graphics* graphics;
-    Input* input;
+    Input input;
     bool inited;
     bool quit;
 
