@@ -1,6 +1,7 @@
 #include <cmath>
 #include <iostream>
 #include "Player.h"
+#include "Input.h"  // Добавлен новый заголовочный файл - It s a basic Artem
 
 const int PLAYER_WIDTH = 20;
 const int PLAYER_HEIGHT = 23;
@@ -13,7 +14,7 @@ Player::Player(GameSystems systems) {
     this->input = systems.input;
 
     // Важно ставить значения по-умолчанию
-    // Иначе в значениях пермененных - мусор
+    // Иначе в значениях перемненных - мусор - sure
     velX = velY = 0.0;
     flipX = false;
     image = NULL;

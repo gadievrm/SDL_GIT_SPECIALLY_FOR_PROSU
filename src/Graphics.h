@@ -23,3 +23,13 @@ class Graphics {
 		void present();
 		~Graphics();
 };
+
+class Animation {
+	private:
+		Animation(){
+			
+		}
+
+
+
+};

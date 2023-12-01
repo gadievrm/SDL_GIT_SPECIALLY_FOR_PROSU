@@ -73,7 +73,7 @@ bool Game::run() {
     frametime_last = frametime_now;
     frametime_now = SDL_GetPerformanceCounter();
 
-    double deltaTime = (frametime_now - frametime_last) * 1000.0 / performanceFrequency;
+    double deltaTime = (frametime_now - frametime_last) * 800.0 / performanceFrequency;
 
     if (SDL_GetTicks64() - ticks > 1000) {
         std::cout << "FPS: " << framesCounted << std::endl;
@@ -83,11 +83,11 @@ bool Game::run() {
 
     framesCounted++;
 
-    SDL_Event e;
-    while (SDL_PollEvent(&e)) {
-        if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP) input.processKeyEvent(e);
+    
+    while (SDL_PollEvent(&(input.e))) {
+        if (input.e.type == SDL_KEYDOWN || input.e.type == SDL_KEYUP) input.processKeyEvent(input.e);
 
-        if ((e.key.keysym.scancode == SDL_SCANCODE_ESCAPE) || e.type == SDL_QUIT) {
+        if ((input.e.key.keysym.scancode == SDL_SCANCODE_ESCAPE) || input.e.type == SDL_QUIT) {
             quit = true;
         }
     }
@@ -98,7 +98,9 @@ bool Game::run() {
 
     graphics->drawImageFullscreen(background);
     for (auto entity : entities) {
-        entity->draw(graphics);
+        if (entity->isDrawable()){
+            entity->draw(graphics);
+        }
     }
 
     graphics->present();
