@@ -7,26 +7,27 @@ and may not be redistributed without written permission.*/
 #define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
 #include <iostream>
 
 #include <malloc.h>
 
 #include "Game.h"
 
-using namespace std;
-
 int initAllOfThisShit(){
 	//Initialize SDL
 	if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
-		cerr <<"SDL could not initialize! SDL_Error:"<< SDL_GetError() << endl;
+		std::cerr <<"SDL could not initialize! SDL_Error:" << SDL_GetError() << std::endl;
 		return 1;
 	}
 	
 	if (IMG_Init(IMG_INIT_PNG) == 0) {
-		cerr << "Error SDL2_image Initialization"<< endl;
+		std::cerr << "SDL2_image init error: "<< IMG_GetError() << std::endl;
 		return 2;
 	}
+
+	Mix_Init(0);
 
 	return 0;
 }
@@ -36,7 +37,7 @@ int main() {
 
 	Game *game = Game::init();
 	if (game == NULL) {
-		cerr << "Could not init game!" << endl;
+		std::cerr << "Could not init game!" << std::endl;
 		return 3; 
 	}
 	game->start();

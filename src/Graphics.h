@@ -19,6 +19,7 @@ class Graphics {
 		image_t *loadImage(const char *path);
 		void drawImageFullscreen(image_t *target);
 		void drawImage(image_t *target, int posX, int posY, bool flip = false);
+		void drawImageScaled(image_t *target, int posX, int posY, double w, double h, bool flip);
 		void present();
 		~Graphics();
 };

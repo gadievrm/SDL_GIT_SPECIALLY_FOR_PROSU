@@ -22,6 +22,8 @@ image_t *Graphics::loadImage(const char *path) {
 	SDL_Surface *textureSurface = NULL;
 	textureSurface = IMG_Load(path);
 
+	std::cout << "Graphics::loadImage(\"" << path << "\");" << std::endl;
+
 	if (textureSurface == NULL) {
 		std::cerr << IMG_GetError() << std::endl;
 		return NULL;
@@ -45,6 +47,12 @@ void Graphics::drawImageFullscreen(image_t *target) {
 
 void Graphics::drawImage(image_t *target, int posX, int posY, bool flip) {
 	SDL_Rect dstRect {.x = posX, .y = posY, .w = target->w, .h = target->h};
+
+	SDL_RenderCopyEx(renderer, target->tex, NULL, &dstRect, 0, NULL, flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+}
+
+void Graphics::drawImageScaled(image_t *target, int posX, int posY, double w, double h, bool flip) {
+	SDL_Rect dstRect {.x = posX, .y = posY, .w = ((int)(target->w * w)), .h = ((int)(target->h * h))};
 
 	SDL_RenderCopyEx(renderer, target->tex, NULL, &dstRect, 0, NULL, flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 }
