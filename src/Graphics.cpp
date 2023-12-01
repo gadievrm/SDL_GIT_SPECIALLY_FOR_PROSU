@@ -29,7 +29,7 @@ image_t *Graphics::loadImage(const char *path) {
 
 	texture = SDL_CreateTextureFromSurface(renderer, textureSurface);
 
-	image_t *loadedImage = (image_t*) malloc(sizeof(image_t));
+	image_t *loadedImage = new image_t;
 	loadedImage -> w = textureSurface->w;
 	loadedImage -> h = textureSurface->h;
 	loadedImage -> tex = texture;

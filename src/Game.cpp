@@ -68,8 +68,8 @@ bool Game::run() {
 
     framesCounted++;
 
-    
-    while (SDL_PollEvent(&(input.e))) {
+    SDL_Event e;
+    while (SDL_PollEvent(&e)) {
         if (input.e.type == SDL_KEYDOWN || input.e.type == SDL_KEYUP) input.processKeyEvent(input.e);
 
         if ((input.e.key.keysym.scancode == SDL_SCANCODE_ESCAPE) || input.e.type == SDL_QUIT) {

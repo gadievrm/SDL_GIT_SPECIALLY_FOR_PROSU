@@ -10,7 +10,6 @@ private:
 
 public:
     Input();
-    SDL_Event e;
     void processKeyEvent(SDL_Event& e);
     bool getAKeyPressed();
     bool getWKeyPressed();
