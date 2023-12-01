@@ -2,19 +2,26 @@
 #include <SDL2/SDL.h>
 #include <vector>
 #include "Graphics.h"
+#include "Audio.h"
 #include "Entity.h"
 #include "Player.h"
 #include "Input.h"
+#include "GameSystems.h"
 
 class Player;
 class Game {
 private:
-    std::vector<Entity*> entities;
     SDL_Window* window;
-    Player* mainPlayer;
-    image_t* background;
+
+    Audio* audio;
     Graphics* graphics;
     Input input;
+    GameSystems systems;
+
+    std::vector<Entity*> entities;
+    Player* mainPlayer;
+    image_t* background;
+
     bool inited;
     bool quit;
 
@@ -31,6 +38,4 @@ public:
     static Game* init();
     void start();
     bool run();
-
-    Input* getInput();
 };

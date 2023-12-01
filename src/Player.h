@@ -3,27 +3,29 @@
 #include "Game.h"
 #include "Entity.h"
 #include "Graphics.h"
+#include "Input.h"
+#include "GameSystems.h"
 
 class Game;
 class Player : public Entity {
-    private:
-        float velX;
-        float velY;
-        bool flipX;
-        image_t *image;
-        Game *game;
+private:
+    Graphics *graphics;
+    Input *input;
 
-    public:
-        Player(Game *game);
+    image_t *image;
 
-        bool getFlipX();
-        image_t *getImage();
-        void setImage(image_t *new_image);
-        Game *getGame();
-        void setGame(Game *newgame);
+    float velX;
+    float velY;
+    bool flipX;
 
-        virtual bool isDrawable();
-        virtual void logic(double dt);
-        virtual void draw(Graphics *graphics);
+public:
+    Player(GameSystems systems);
 
+    bool getFlipX();
+    image_t *getImage();
+    void setImage(image_t *new_image);
+
+    virtual bool isDrawable();
+    virtual void logic(double dt);
+    virtual void draw(Graphics *graphics);
 };

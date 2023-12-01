@@ -9,8 +9,9 @@ const int PLAYER_HEIGHT = 23;
 const float moveSpeed = 0.004;
 const float friction = 0.995;
 
-Player::Player(Game *game) {
-    this->game = game;
+Player::Player(GameSystems systems) {
+    this->graphics = systems.graphics;
+    this->input = systems.input;
 
     // Важно ставить значения по-умолчанию
     // Иначе в значениях перемненных - мусор - sure
@@ -28,8 +29,6 @@ bool Player::getFlipX() {
 }
 
 void Player::logic(double dt) {
-    Input *input = getGame()->getInput();
-
     if (input->getAKeyPressed()) {
         this->flipX = true;
         this->velX -= moveSpeed * dt;
@@ -50,14 +49,6 @@ void Player::logic(double dt) {
 
     this->velX *= pow(friction, dt);
     this->velY *= pow(friction, dt);
-}
-
-Game *Player::getGame() {
-    return game;
-}
-
-void Player::setGame(Game *newgame) {
-    game = newgame;
 }
 
 image_t *Player::getImage() {

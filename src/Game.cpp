@@ -1,5 +1,7 @@
 #include <iostream>
 #include "Game.h"
+#include "Gem.h"
+#include <SDL2/SDL_mixer.h>
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
@@ -16,6 +18,14 @@ Game* Game::init() {
     }
 
     game->graphics = Graphics::init(game->window);
+
+    game->audio = Audio::init();
+
+    game->systems = {
+        .input    = &game->input   ,
+        .graphics =  game->graphics,
+        .audio    =  game->audio
+    };
 
     game->inited = true;
 
@@ -42,12 +52,17 @@ void Game::start() {
     performanceFrequency = SDL_GetPerformanceFrequency();
 
     background = graphics->loadImage("data/gfx/environment/bg/back.png");
-    mainPlayer = new Player(this);
+    mainPlayer = new Player(systems);
     mainPlayer->setImage(graphics->loadImage("data/gfx/sprites/player/idle/player-idle-1.png"));
-    mainPlayer->setPosX(SCREEN_WIDTH / 2 - mainPlayer->getImage()->w / 2);
+    mainPlayer->setPosX(SCREEN_WIDTH  / 2 - mainPlayer->getImage()->w / 2);
     mainPlayer->setPosY(SCREEN_HEIGHT / 2 - mainPlayer->getImage()->h / 2);
 
     entities.push_back(mainPlayer);
+
+    Gem *gem = new Gem(systems);
+    gem->setPosX(100);
+    gem->setPosY(100);
+    entities.push_back(gem);
 }
 
 bool Game::run() {
@@ -91,8 +106,4 @@ bool Game::run() {
     graphics->present();
 
     return !quit;
-}
-
-Input* Game::getInput() {
-    return &input;
 }

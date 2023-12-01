@@ -4,7 +4,7 @@ SOURCE_DIR  = src
 INCLUDE_DIR = src/include
 LIBRARY_DIR = src/lib
 
-LIBS = -L$(LIBRARY_DIR) -lSDL2 -lSDL2_Image -lSDL2Main
+LIBS = -L$(LIBRARY_DIR) -lSDL2Main -lSDL2_Mixer -lSDL2_Image -lSDL2
 LFLAGS = $(LIBS) # -mwindows ## To disable console
 CFLAGS = -I$(INCLUDE_DIR) $(LIBS)
 
