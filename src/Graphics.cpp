@@ -29,14 +29,14 @@ image_t *Graphics::loadImage(const char *path) {
 
 	texture = SDL_CreateTextureFromSurface(renderer, textureSurface);
 
-	image_t *result = (image_t*) malloc(sizeof(image_t));
-	result -> w = textureSurface->w;
-	result -> h = textureSurface->h;
-	result -> tex = texture;
+	image_t *loadedImage = (image_t*) malloc(sizeof(image_t));
+	loadedImage -> w = textureSurface->w;
+	loadedImage -> h = textureSurface->h;
+	loadedImage -> tex = texture;
 
 	SDL_FreeSurface(textureSurface);
 
-	return result;
+	return loadedImage;
 }
 
 void Graphics::drawImageFullscreen(image_t *target) {
