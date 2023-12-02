@@ -20,10 +20,6 @@ Player::Player(GameSystems systems) {
     image = NULL;
 }
 
-bool Player::isDrawable() {
-    return true;
-}
-
 bool Player::getFlipX() {
     return this->flipX;
 }

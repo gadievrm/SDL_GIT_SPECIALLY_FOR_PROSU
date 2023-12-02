@@ -32,10 +32,6 @@ int Gem::getCurrentFrame() {
     }
 }
 
-bool Gem::isDrawable() {
-    return true;
-}
-
 void Gem::logic(double dt) {
     gameTime += dt;
 }

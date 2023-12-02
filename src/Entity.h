@@ -15,7 +15,6 @@ public:
     float getPosY();
     void setPosX(float new_posX);
     void setPosY(float new_posY);
-    virtual bool isDrawable() = 0;
     virtual void logic(double dt) = 0;
     virtual void draw(Graphics *graphics) = 0;
 

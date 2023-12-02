@@ -85,9 +85,9 @@ bool Game::run() {
 
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
-        if (input.e.type == SDL_KEYDOWN || input.e.type == SDL_KEYUP) input.processKeyEvent(input.e);
+        if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP) input.processKeyEvent(e);
 
-        if ((input.e.key.keysym.scancode == SDL_SCANCODE_ESCAPE) || input.e.type == SDL_QUIT) {
+        if ((e.key.keysym.scancode == SDL_SCANCODE_ESCAPE) || e.type == SDL_QUIT) {
             quit = true;
         }
     }
@@ -98,9 +98,7 @@ bool Game::run() {
 
     graphics->drawImageFullscreen(background);
     for (auto entity : entities) {
-        if (entity->isDrawable()){
-            entity->draw(graphics);
-        }
+        entity->draw(graphics);
     }
 
     graphics->present();

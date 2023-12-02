@@ -25,7 +25,6 @@ public:
     image_t *getImage();
     void setImage(image_t *new_image);
 
-    virtual bool isDrawable();
     virtual void logic(double dt);
     virtual void draw(Graphics *graphics);
 };
