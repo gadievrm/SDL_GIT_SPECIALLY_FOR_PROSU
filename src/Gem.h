@@ -27,7 +27,6 @@ private:
 public:
     Gem(GameSystems systems);
     void pickup();
-    virtual bool isDrawable();
     virtual void logic(double dt);
     virtual void draw(Graphics *graphics);
 };
