@@ -20,7 +20,7 @@ private:
 
     uint64_t pickupTime;
     bool pickedUp;
-    double gameTime;
+    double aliveTime;
     
     int getCurrentFrame();
 

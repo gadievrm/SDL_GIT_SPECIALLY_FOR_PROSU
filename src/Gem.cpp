@@ -17,7 +17,7 @@ Gem::Gem(GameSystems systems) {
 
     pickupTime = 0;
     pickedUp = false;
-    gameTime = 0;
+    aliveTime = 0;
 
     audio = systems.audio;
 
@@ -26,9 +26,9 @@ Gem::Gem(GameSystems systems) {
 
 int Gem::getCurrentFrame() {
     if (!pickedUp) {
-        return ((int) ((gameTime) / GEM_ANIM_IDLE_INTERVAL)) % GEM_ANIM_IDLE_FRAMES;
+        return ((int) ((aliveTime) / GEM_ANIM_IDLE_INTERVAL)) % GEM_ANIM_IDLE_FRAMES;
     } else {
-        return GEM_ANIM_IDLE_FRAMES + (((int) ((gameTime - pickupTime) / GEM_ANIM_PICKUP_INTERVAL)) % GEM_ANIM_PICKUP_FRAMES);
+        return GEM_ANIM_IDLE_FRAMES + (((int) ((aliveTime - pickupTime) / GEM_ANIM_PICKUP_INTERVAL)) % GEM_ANIM_PICKUP_FRAMES);
     }
 }
 
@@ -37,11 +37,12 @@ bool Gem::isDrawable() {
 }
 
 void Gem::logic(double dt) {
-    gameTime += dt;
+    aliveTime += dt;
+    if (aliveTime > 5000) pickup();
 }
 
 void Gem::draw(Graphics *graphics) {
-    if (pickedUp && ((gameTime - pickupTime) > (GEM_ANIM_PICKUP_FRAMES * GEM_ANIM_IDLE_INTERVAL))) return;
+    if (pickedUp && ((aliveTime - pickupTime) > (GEM_ANIM_PICKUP_FRAMES * GEM_ANIM_IDLE_INTERVAL))) return;
 
     double size = 2.0 - 1.0 * pickedUp;
 
@@ -51,6 +52,6 @@ void Gem::draw(Graphics *graphics) {
 void Gem::pickup() {
     if (pickedUp) return;
     pickedUp = true;
-    pickupTime = gameTime;
+    pickupTime = aliveTime;
     audio->playSound(pickupSound);
 }
