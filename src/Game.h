@@ -8,7 +8,6 @@
 #include "Input.h"
 #include "GameSystems.h"
 
-class Player;
 class Game {
 private:
     SDL_Window* window;

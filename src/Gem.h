@@ -27,6 +27,6 @@ private:
 public:
     Gem(GameSystems systems);
     void pickup();
-    virtual void logic(double dt);
-    virtual void draw(Graphics *graphics);
+    void logic(double dt) override;
+    void draw(Graphics *graphics) override;
 };
