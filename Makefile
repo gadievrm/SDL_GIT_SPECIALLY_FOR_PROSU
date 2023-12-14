@@ -10,17 +10,16 @@ CFLAGS = -I$(INCLUDE_DIR) $(LIBS)
 
 
 OBJ = $(addsuffix .o,$(basename $(wildcard $(SOURCE_DIR)/*.cpp))) # All .cpp files in src/ but name ending with .o instead of .cpp
+HEADERS = $(wildcard $(SOURCE_DIR)/*.h)
 
 #### File conversion rules ####
 ## .cpp -> .o
-%.o: %.cpp
+%.o: %.cpp $(HEADERS)
 	g++ $(CFLAGS) -c $< -o $@
 
 #### Main ####
 $(TARGET): $(OBJ) Makefile
-	echo $(OBJ)
 	g++ -o $(TARGET) $(SOURCE_DIR)/*.o $(LFLAGS)
-
 
 ##### Commands ####
 ## Remove all temporary build files
