@@ -1,5 +1,5 @@
 #pragma once
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <vector>
 #include "Graphics.h"
 #include "Audio.h"
@@ -10,12 +10,15 @@
 #include "EntityManager.h"
 #include "AssetManager.h"
 
+#include <imgui.h>
+
 class CGame {
 private:
     // VIDEO
     SDL_Window* m_window;
 
     // Meta state
+    ImGuiContext *m_imgui_ctx;
     CGraphics* m_graphics;
     CInput m_input;
     CEntityManager m_entities;

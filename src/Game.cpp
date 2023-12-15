@@ -5,6 +5,9 @@
 #include "ImageAssetLoader.h"
 #include "SoundAssetLoader.h"
 
+#include "imgui_impl_sdl2.h"
+#include "imgui_impl_sdlrenderer2.h"
+
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 
@@ -22,6 +25,7 @@ CGame* CGame::init() {
     }
 
     game->m_graphics = CGraphics::init(game->m_window);
+    SDL_Renderer *renderer = game->m_graphics->getRenderer();
 
     game->m_systems = {
         .input          = &game->m_input    ,
@@ -31,8 +35,13 @@ CGame* CGame::init() {
         .assets         = &game->m_assets
     };
 
-    game->m_assets.addLoader(*new CImageAssetLoader(game->m_graphics->getRenderer()));
+    game->m_assets.addLoader(*new CImageAssetLoader(renderer));
     game->m_assets.addLoader(*new CSoundAssetLoader());
+
+    // IMGUI
+    game->m_imgui_ctx = ImGui::CreateContext();
+	ImGui_ImplSDL2_InitForSDLRenderer(game->m_window, renderer);
+    ImGui_ImplSDLRenderer2_Init(renderer);
 
     game->m_inited = true;
 
@@ -41,6 +50,10 @@ CGame* CGame::init() {
 
 CGame::~CGame() {
     if (!m_inited) return;
+
+    ImGui::DestroyContext(m_imgui_ctx);
+    ImGui_ImplSDLRenderer2_Shutdown();
+    ImGui_ImplSDL2_Shutdown();
 
     delete m_graphics;
     SDL_DestroyWindow(m_window);
@@ -67,8 +80,8 @@ void CGame::start() {
     m_main_player = new CPlayer(m_systems);
     m_main_player->setPosX(SCREEN_WIDTH  / 2 - m_main_player->getImage()->getWidth() / 2);
     m_main_player->setPosY(SCREEN_HEIGHT / 2 - m_main_player->getImage()->getHeight() / 2);
-
     m_entities.addEntityWithName("000player", *m_main_player);
+    
     {
         auto width    = 1;
         auto height   = 1;
@@ -106,6 +119,11 @@ bool CGame::run() {
     }
     m_frames_counted++;
 
+    ImGui_ImplSDL2_NewFrame(m_window);
+    ImGui_ImplSDLRenderer2_NewFrame();
+    ImGui::NewFrame();
+    ImGui::ShowDemoWindow();
+
     // -----------------------------------------------------
     // -----------------------------------------------------
     //                        INPUT
@@ -113,6 +131,7 @@ bool CGame::run() {
     // -----------------------------------------------------
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
+        ImGui_ImplSDL2_ProcessEvent(&e);
         if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP) m_input.processKeyEvent(e);
 
         if ((e.key.keysym.scancode == SDL_SCANCODE_ESCAPE) || e.type == SDL_QUIT) {
@@ -122,16 +141,11 @@ bool CGame::run() {
 
     // -----------------------------------------------------
     // -----------------------------------------------------
-    //                      PROCESSING
+    //                      LOGIC
     // -----------------------------------------------------
     // -----------------------------------------------------
     for (auto entity : m_entities.getAllEntities()) {
         entity->logic(delta_time);
-    }
-
-    m_graphics->drawImageFullscreen(m_background);
-    for (auto entity : m_entities.getAllEntities()) {
-        entity->draw(m_graphics);
     }
 
     // -----------------------------------------------------
@@ -139,6 +153,14 @@ bool CGame::run() {
     //                       OUTPUT
     // -----------------------------------------------------
     // -----------------------------------------------------
+    m_graphics->drawImageFullscreen(m_background);
+    for (auto entity : m_entities.getAllEntities()) {
+        entity->draw(m_graphics);
+    }
+
+    ImGui::Render();
+    ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
+
     m_graphics->present();
 
     return !m_quit;

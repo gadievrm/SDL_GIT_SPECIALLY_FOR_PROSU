@@ -4,7 +4,6 @@ void CAssetManager::addLoader(IAssetLoader &loader) {
     m_asset_loaders[int(loader.getType())] = &loader;
 }
 
-#include <iostream>
 ACAsset* CAssetManager::fetchAsset(EAssetType type, const std::string& path) {
     ACAsset *asset;
 

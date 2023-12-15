@@ -3,7 +3,7 @@
 #include <optional>
 
 enum EAssetType {
-    ASSET_TYPE_SOUND,
+    ASSET_TYPE_SOUND = 0,
     ASSET_TYPE_MUSIC,
     ASSET_TYPE_BITMAP,
     ASSET_TYPE_MAP,

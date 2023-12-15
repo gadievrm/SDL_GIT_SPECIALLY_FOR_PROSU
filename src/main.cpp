@@ -5,14 +5,14 @@ and may not be redistributed without written permission.*/
 
 //Using SDL and standard IO
 #define SDL_MAIN_HANDLED
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_mixer.h>
+#include <SDL.h>
+#include <SDL_image.h>
+#include <SDL_mixer.h>
 #include <iostream>
 
 #include "Game.h"
 
-int initAllOfThisShit(){
+static int initAllOfThisShit(){
 	//Initialize SDL
 	if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
@@ -38,6 +38,7 @@ int main(int argc, char **argv) {
 		std::cerr << "Could not init game!" << std::endl;
 		return 3; 
 	}
+
 	game->start();
 	while (game->run()) {}
 	delete game;

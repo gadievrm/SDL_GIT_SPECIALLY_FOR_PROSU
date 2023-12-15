@@ -1,5 +1,4 @@
 #include <cmath>
-#include <iostream>
 #include "Player.h"
 #include "Input.h"  // Добавлен новый заголовочный файл - It s a basic Artem
 

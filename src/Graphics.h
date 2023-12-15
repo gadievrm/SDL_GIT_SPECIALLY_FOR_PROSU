@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Image.h"
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 
 

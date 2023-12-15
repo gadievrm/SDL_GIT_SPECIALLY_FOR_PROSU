@@ -1,4 +1,3 @@
-#include <iostream>
 #include "ImageAssetLoader.h"
 
 CImageAssetLoader::CImageAssetLoader(SDL_Renderer *renderer) : m_renderer(renderer)
@@ -18,10 +17,7 @@ ACAsset* CImageAssetLoader::loadAsset(const std::string& path) {
 	SDL_Surface *surface = NULL;
 	surface = IMG_Load(path.c_str());
 
-	std::cout << "CImageAssetLoader::loadAsset(\"" << path << "\");" << std::endl;
-
 	if (surface == NULL) {
-		std::cerr << IMG_GetError() << std::endl;
 		return NULL;
 	}
 

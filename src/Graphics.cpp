@@ -1,5 +1,4 @@
-#include <iostream>
-#include <SDL2/SDL_image.h>
+#include <SDL_image.h>
 #include "Graphics.h"
 
 CGraphics* CGraphics::init(SDL_Window *window) {

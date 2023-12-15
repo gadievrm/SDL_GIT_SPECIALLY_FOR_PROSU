@@ -3,14 +3,15 @@
         {
             "name": "Win32",
             "includePath": [
-                "${workspaceFolder}/include",
+                "${workspaceFolder}/include/SDL2",
+                "${workspaceFolder}/include/imgui"
             ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE"
             ],
-            "compilerPath": "C:\\mingw_off\\mingw64\\bin\\gcc.exe",
+            "compilerPath": "C:\\mingw64\\bin\\gcc.exe",
             "cStandard": "c11",
             "cppStandard": "gnu++20",
             "intelliSenseMode": "windows-gcc-x64"
