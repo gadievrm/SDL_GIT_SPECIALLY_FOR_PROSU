@@ -69,7 +69,6 @@ void CGame::start() {
     m_main_player->setPosY(SCREEN_HEIGHT / 2 - m_main_player->getImage()->getHeight() / 2);
 
     m_entities.addEntityWithName("000player", *m_main_player);
-
     {
         auto width    = 1;
         auto height   = 1;

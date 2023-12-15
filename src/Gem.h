@@ -22,7 +22,7 @@ private:
     bool m_picked_up;
     double m_game_time;
 public:
-    CGem(GameSystems systems);
+    CGem(TGameSystems systems);
     void pickup();
     void logic(double dt) override;
     void draw(CGraphics *graphics) override;

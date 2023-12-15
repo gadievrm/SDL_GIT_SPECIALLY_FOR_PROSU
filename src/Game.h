@@ -22,7 +22,7 @@ private:
     CAssetManager m_assets;
 
     // Cache of systems entities have access to
-    GameSystems m_systems;
+    TGameSystems m_systems;
 
     // Level state (TODO: remove by integrating into world/entities)
     CPlayer* m_main_player;

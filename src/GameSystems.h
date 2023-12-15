@@ -5,8 +5,7 @@
 #include "EntityManager.h"
 #include "AssetManager.h"
 
-
-struct GameSystems {
+struct TGameSystems {
     CInput *input;
     CGraphics *graphics;
     CAudio *audio;

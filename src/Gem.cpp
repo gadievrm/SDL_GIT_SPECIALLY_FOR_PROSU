@@ -1,7 +1,7 @@
 #include <cstdio>
 #include "Gem.h"
 
-CGem::CGem(GameSystems systems) {
+CGem::CGem(TGameSystems systems) {
     char path[256];
     int loadedFrame = 0;
     CAssetManager *assets = systems.assets;

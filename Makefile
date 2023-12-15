@@ -1,33 +1,46 @@
-TARGET = build/main.exe
-
+###############
+### FOLDERS ###
+###############
 SOURCE_DIR  = src
-INCLUDE_DIR = src/include
-LIBRARY_DIR = src/lib
+BUILD_DIR   = build
+INCLUDE_DIR = include
+LIBRARY_DIR = lib
 
+###############
+#### FILES ####
+###############
+TARGET = final/main.exe
+OBJS = $(addprefix $(BUILD_DIR)/,$(notdir $(addsuffix .o,$(basename $(wildcard $(SOURCE_DIR)/*.cpp))))) # src/%.cpp > build/%.o
+HEADERS = $(wildcard $(SOURCE_DIR)/*.h)
+
+###############
+# COMPILATION #
+###############
+CPP = g++
 LIBS = -L$(LIBRARY_DIR) -lSDL2Main -lSDL2_Mixer -lSDL2_Image -lSDL2
 LFLAGS = $(LIBS) # -mwindows ## To disable console
 CFLAGS = -I$(INCLUDE_DIR) $(LIBS)
 
+###############
+#### RULES ####
+###############
+# .cpp -> .o  #
+$(BUILD_DIR)/%.o: $(SOURCE_DIR)/%.cpp $(HEADERS)
+	$(CPP) $(CFLAGS) -c $< -o $@
 
-OBJ = $(addsuffix .o,$(basename $(wildcard $(SOURCE_DIR)/*.cpp))) # All .cpp files in src/ but name ending with .o instead of .cpp
-HEADERS = $(wildcard $(SOURCE_DIR)/*.h)
+#     Main    #
+$(TARGET): $(OBJS) Makefile
+	$(CPP) -o $(TARGET) $(BUILD_DIR)/*.o $(LFLAGS)
 
-#### File conversion rules ####
-## .cpp -> .o
-%.o: %.cpp $(HEADERS)
-	g++ $(CFLAGS) -c $< -o $@
-
-#### Main ####
-$(TARGET): $(OBJ) Makefile
-	g++ -o $(TARGET) $(SOURCE_DIR)/*.o $(LFLAGS)
-
-##### Commands ####
-## Remove all temporary build files
+################
+### COMMANDS ###
+################
+# Remove temp files
 clean:
-	rm -f $(SOURCE_DIR)/*.o
+	rm -f $(BUILD_DIR)/*.o
 	rm -f $(TARGET)
 
-## Start the program
+# Launch
 run: $(TARGET)
 	(cd $(dir $(TARGET)); ./$(notdir $(TARGET)))
 

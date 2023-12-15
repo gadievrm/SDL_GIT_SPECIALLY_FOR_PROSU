@@ -16,7 +16,7 @@ private:
     bool m_flipX;
 
 public:
-    CPlayer(GameSystems systems);
+    CPlayer(TGameSystems systems);
 
     bool getFlipX();
     CImage *getImage();

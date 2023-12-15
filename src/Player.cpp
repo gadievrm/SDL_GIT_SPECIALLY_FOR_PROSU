@@ -8,7 +8,7 @@ const int PLAYER_HEIGHT = 23;
 const float MOVE_SPEED  = 0.004;
 const float FRICTION    = 0.995;
 
-CPlayer::CPlayer(GameSystems systems) {
+CPlayer::CPlayer(TGameSystems systems) {
     m_input = systems.input;
 
     // Важно ставить значения по-умолчанию
