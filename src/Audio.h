@@ -1,13 +1,22 @@
 #pragma once
 #include <SDL2/SDL_mixer.h>
+#include <string>
+#include "Asset.h"
 
-typedef Mix_Chunk sound_t;
-
-class Audio {
+class CAudio;
+class CSound : public ACAsset {
 private:
-    Audio() = default;
+    Mix_Chunk *m_chunk;
 public:
-    static Audio *init();
-    sound_t *loadSound(const char *path);
-    void playSound(sound_t *sound);
+    CSound(std::optional<std::string>, Mix_Chunk *chunk);
+    Mix_Chunk *getChunk();
+};
+
+class CAudio {
+private:
+    CAudio() = default;
+public:
+    static CAudio *init();
+    CSound *loadSound(const char *path);
+    void playSound(CSound *sound);
 };

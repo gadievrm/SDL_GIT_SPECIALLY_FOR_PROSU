@@ -5,24 +5,22 @@
 #include "Input.h"
 #include "GameSystems.h"
 
-class Player : public Entity {
+class CPlayer : public ACEntity {
 private:
-    Graphics *graphics;
-    Input *input;
+    CInput *m_input;
 
-    image_t *image;
+    CImage *m_image;
 
-    float velX;
-    float velY;
-    bool flipX;
+    float m_velX;
+    float m_velY;
+    bool m_flipX;
 
 public:
-    Player(GameSystems systems);
+    CPlayer(GameSystems systems);
 
     bool getFlipX();
-    image_t *getImage();
-    void setImage(image_t *new_image);
+    CImage *getImage();
 
     void logic(double dt) override;
-    void draw(Graphics *graphics) override;
+    void draw(CGraphics *graphics) override;
 };

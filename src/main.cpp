@@ -10,8 +10,6 @@ and may not be redistributed without written permission.*/
 #include <SDL2/SDL_mixer.h>
 #include <iostream>
 
-#include <malloc.h>
-
 #include "Game.h"
 
 int initAllOfThisShit(){
@@ -32,10 +30,10 @@ int initAllOfThisShit(){
 	return 0;
 }
 
-int main() {
+int main(int argc, char **argv) {
 	if (initAllOfThisShit() != 0) return 1;
 
-	Game *game = Game::init();
+	CGame *game = CGame::init();
 	if (game == NULL) {
 		std::cerr << "Could not init game!" << std::endl;
 		return 3; 
@@ -48,5 +46,5 @@ int main() {
 	IMG_Quit();
 	SDL_Quit();
 
-	return 0;
+	return EXIT_SUCCESS;
 }

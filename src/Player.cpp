@@ -3,58 +3,54 @@
 #include "Player.h"
 #include "Input.h"  // Добавлен новый заголовочный файл - It s a basic Artem
 
-const int PLAYER_WIDTH = 20;
+const int PLAYER_WIDTH  = 20;
 const int PLAYER_HEIGHT = 23;
+const float MOVE_SPEED  = 0.004;
+const float FRICTION    = 0.995;
 
-const float moveSpeed = 0.004;
-const float friction = 0.995;
-
-Player::Player(GameSystems systems) {
-    this->graphics = systems.graphics;
-    this->input = systems.input;
+CPlayer::CPlayer(GameSystems systems) {
+    m_input = systems.input;
 
     // Важно ставить значения по-умолчанию
     // Иначе в значениях перемненных - мусор - sure
-    velX = velY = 0.0;
-    flipX = false;
-    image = NULL;
+    m_velX = m_velY = 0.0;
+    m_flipX = false;
+    m_image = NULL;
+
+    m_image = static_cast<CImage*>(systems.assets->fetchAsset(ASSET_TYPE_BITMAP, "data/gfx/sprites/player/idle/player-idle-1.png"));
 }
 
-bool Player::getFlipX() {
-    return this->flipX;
+bool CPlayer::getFlipX() {
+    return m_flipX;
 }
 
-void Player::logic(double dt) {
-    if (input->getAKeyPressed()) {
-        this->flipX = true;
-        this->velX -= moveSpeed * dt;
+void CPlayer::logic(double dt) {
+    if (m_input->getAKeyPressed()) {
+        m_flipX = true;
+        m_velX -= MOVE_SPEED * dt;
     }
-    if (input->getDKeyPressed()) {
-        this->flipX = false;
-        this->velX += moveSpeed * dt;
+    if (m_input->getDKeyPressed()) {
+        m_flipX = false;
+        m_velX += MOVE_SPEED * dt;
     }
-    if (input->getWKeyPressed()) {
-        this->velY -= moveSpeed * dt;
+    if (m_input->getWKeyPressed()) {
+        m_velY -= MOVE_SPEED * dt;
     }
-    if (input->getSKeyPressed()) {
-        this->velY += moveSpeed * dt;
+    if (m_input->getSKeyPressed()) {
+        m_velY += MOVE_SPEED * dt;
     }
 
-    this->setPosX(this->getPosX() + this->velX * dt);
-    this->setPosY(this->getPosY() + this->velY * dt);
+    setPosX(getPosX() + m_velX * dt);
+    setPosY(getPosY() + m_velY * dt);
 
-    this->velX *= pow(friction, dt);
-    this->velY *= pow(friction, dt);
+    m_velX *= pow(FRICTION, dt);
+    m_velY *= pow(FRICTION, dt);
 }
 
-image_t *Player::getImage() {
-    return this->image;
+CImage *CPlayer::getImage() {
+    return m_image;
 }
 
-void Player::setImage(image_t *new_image) {
-    this->image = new_image;
-}
-
-void Player::draw(Graphics *graphics) {
-    graphics->drawImage(this->image, this->getPosX(), this->getPosY(), this->getFlipX());
+void CPlayer::draw(CGraphics *graphics) {
+    graphics->drawImage(m_image, getPosX(), getPosY(), getFlipX());
 }

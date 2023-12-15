@@ -4,7 +4,7 @@
 #include <SDL2/SDL.h>
 #include "Graphics.h"
 
-class Entity {
+class ACEntity {
 private:
     std::string name;
     float posX;
@@ -16,7 +16,7 @@ public:
     void setPosX(float new_posX);
     void setPosY(float new_posY);
     virtual void logic(double dt) = 0;
-    virtual void draw(Graphics *graphics) = 0;
+    virtual void draw(CGraphics *graphics) = 0;
 
 
     std::string getName();

@@ -1,15 +1,15 @@
 #pragma once
 #include <SDL2/SDL.h>
 
-class Input {
+class CInput {
 private:
-    bool aKeyPressed;
-    bool wKeyPressed;
-    bool sKeyPressed;
-    bool dKeyPressed;
+    bool a_key_pressed;
+    bool w_key_pressed;
+    bool s_key_pressed;
+    bool d_key_pressed;
 
 public:
-    Input();
+    CInput();
     void processKeyEvent(SDL_Event& e);
     bool getAKeyPressed();
     bool getWKeyPressed();

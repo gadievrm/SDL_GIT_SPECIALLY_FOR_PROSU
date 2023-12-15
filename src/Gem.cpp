@@ -1,52 +1,55 @@
 #include <cstdio>
 #include "Gem.h"
 
-Gem::Gem(GameSystems systems) {
+CGem::CGem(GameSystems systems) {
     char path[256];
     int loadedFrame = 0;
+    CAssetManager *assets = systems.assets;
 
     for (int i = 1; i <= GEM_ANIM_IDLE_FRAMES; i++) {
         sprintf(path, "data/gfx/sprites/gem/gem-%d.png", i);
-        frames[loadedFrame++] = systems.graphics->loadImage(path);
+        m_frames[loadedFrame++] = static_cast<CImage*>(assets->fetchAsset(ASSET_TYPE_BITMAP, path));
     }
 
     for (int i = 1; i <= GEM_ANIM_PICKUP_FRAMES; i++) {
         sprintf(path, "data/gfx/sprites/item-feedback/item-feedback-%d.png", i);
-        frames[loadedFrame++] = systems.graphics->loadImage(path);
+        m_frames[loadedFrame++] = static_cast<CImage*>(assets->fetchAsset(ASSET_TYPE_BITMAP, path));
     }
 
-    pickupTime = 0;
-    pickedUp = false;
-    gameTime = 0;
+    m_pickup_sound = static_cast<CSound*>(assets->fetchAsset(ASSET_TYPE_SOUND, "data/sfx/pickup_bonus.wav"));
 
-    audio = systems.audio;
+    m_pickup_time = 0;
+    m_picked_up = false;
+    m_game_time = 0;
 
-    pickupSound = audio->loadSound("data/sfx/pickup_bonus.wav");
+    m_audio = systems.audio;
 }
 
-int Gem::getCurrentFrame() {
-    if (!pickedUp) {
-        return ((int) ((gameTime) / GEM_ANIM_IDLE_INTERVAL)) % GEM_ANIM_IDLE_FRAMES;
+static int getCurrentFrame(double game_time, bool picked_up, double pickup_time) {
+    if (!picked_up) {
+        return ((int) ((game_time) / GEM_ANIM_IDLE_INTERVAL)) % GEM_ANIM_IDLE_FRAMES;
     } else {
-        return GEM_ANIM_IDLE_FRAMES + (((int) ((gameTime - pickupTime) / GEM_ANIM_PICKUP_INTERVAL)) % GEM_ANIM_PICKUP_FRAMES);
+        return GEM_ANIM_IDLE_FRAMES + (((int) ((game_time - pickup_time) / GEM_ANIM_PICKUP_INTERVAL)) % GEM_ANIM_PICKUP_FRAMES);
     }
 }
 
-void Gem::logic(double dt) {
-    gameTime += dt;
+void CGem::logic(double dt) {
+    m_game_time += dt;
+
+    if (m_game_time >= 5000) pickup();
 }
 
-void Gem::draw(Graphics *graphics) {
-    if (pickedUp && ((gameTime - pickupTime) > (GEM_ANIM_PICKUP_FRAMES * GEM_ANIM_IDLE_INTERVAL))) return;
+void CGem::draw(CGraphics *graphics) {
+    if (m_picked_up && ((m_game_time - m_pickup_time) > (GEM_ANIM_PICKUP_FRAMES * GEM_ANIM_IDLE_INTERVAL))) return;
 
-    double size = 2.0 - 1.0 * pickedUp;
+    double size = 2.0 - 1.0 * m_picked_up;
 
-    graphics->drawImageScaled(frames[getCurrentFrame()], getPosX(), getPosY(), size, size, false);
+    graphics->drawImageScaled(m_frames[getCurrentFrame(m_game_time, m_picked_up, m_pickup_time)], getPosX(), getPosY(), size, size, false);
 }
 
-void Gem::pickup() {
-    if (pickedUp) return;
-    pickedUp = true;
-    pickupTime = gameTime;
-    audio->playSound(pickupSound);
+void CGem::pickup() {
+    if (m_picked_up) return;
+    m_picked_up = true;
+    m_pickup_time = m_game_time;
+    m_audio->playSound(m_pickup_sound);
 }

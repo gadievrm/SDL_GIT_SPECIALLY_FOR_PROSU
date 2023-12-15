@@ -1,62 +1,42 @@
 #include <iostream>
-#include "Graphics.h"
 #include <SDL2/SDL_image.h>
+#include "Graphics.h"
 
-Graphics* Graphics::init(SDL_Window *window) {
+CGraphics* CGraphics::init(SDL_Window *window) {
 
-	Graphics *graphics = new Graphics();
+	CGraphics *graphics = new CGraphics();
 	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	SDL_RenderSetVSync(renderer, 1);
 
-	graphics->renderer = renderer;
+	graphics->m_renderer = renderer;
 
 	return graphics;
 }
 
-Graphics::~Graphics() {
-	SDL_DestroyRenderer(renderer);
+CGraphics::~CGraphics() {
+	SDL_DestroyRenderer(m_renderer);
 }
 
-image_t *Graphics::loadImage(const char *path) {
-	SDL_Texture *texture;
-	SDL_Surface *textureSurface = NULL;
-	textureSurface = IMG_Load(path);
-
-	std::cout << "Graphics::loadImage(\"" << path << "\");" << std::endl;
-
-	if (textureSurface == NULL) {
-		std::cerr << IMG_GetError() << std::endl;
-		return NULL;
-	}
-
-	texture = SDL_CreateTextureFromSurface(renderer, textureSurface);
-
-	image_t *loadedImage = new image_t;
-	loadedImage -> w = textureSurface->w;
-	loadedImage -> h = textureSurface->h;
-	loadedImage -> tex = texture;
-
-	SDL_FreeSurface(textureSurface);
-
-	return loadedImage;
+void CGraphics::drawImageFullscreen(CImage *image) {
+	SDL_RenderCopy(m_renderer, image->getTexture(), NULL, NULL);
 }
 
-void Graphics::drawImageFullscreen(image_t *target) {
-	SDL_RenderCopy(renderer, target->tex, NULL, NULL);
+void CGraphics::drawImage(CImage *image, int posX, int posY, bool flip) {
+	SDL_Rect dest_rect {.x = posX, .y = posY, .w = image->getWidth(), .h = image->getHeight()};
+
+	SDL_RenderCopyEx(m_renderer, image->getTexture(), NULL, &dest_rect, 0, NULL, flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 }
 
-void Graphics::drawImage(image_t *target, int posX, int posY, bool flip) {
-	SDL_Rect dstRect {.x = posX, .y = posY, .w = target->w, .h = target->h};
+void CGraphics::drawImageScaled(CImage *image, int posX, int posY, double w, double h, bool flip) {
+	SDL_Rect dest_rect {.x = posX, .y = posY, .w = ((int)(image->getWidth() * w)), .h = ((int)(image->getHeight() * h))};
 
-	SDL_RenderCopyEx(renderer, target->tex, NULL, &dstRect, 0, NULL, flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+	SDL_RenderCopyEx(m_renderer, image->getTexture(), NULL, &dest_rect, 0, NULL, flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 }
 
-void Graphics::drawImageScaled(image_t *target, int posX, int posY, double w, double h, bool flip) {
-	SDL_Rect dstRect {.x = posX, .y = posY, .w = ((int)(target->w * w)), .h = ((int)(target->h * h))};
-
-	SDL_RenderCopyEx(renderer, target->tex, NULL, &dstRect, 0, NULL, flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+void CGraphics::present() {
+	SDL_RenderPresent(m_renderer);
 }
 
-void Graphics::present() {
-	SDL_RenderPresent(renderer);
+SDL_Renderer* CGraphics::getRenderer() {
+	return m_renderer;
 }

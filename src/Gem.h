@@ -11,22 +11,19 @@
 #define GEM_ANIM_PICKUP_FRAMES 4
 #define GEM_ANIM_PICKUP_INTERVAL 250
 
-class Gem : public Entity {
+class CGem : public ACEntity {
 private:
-    Audio *audio;
+    CAudio *m_audio;
 
-    image_t *frames[GEM_ANIM_IDLE_FRAMES + GEM_ANIM_PICKUP_FRAMES];
-    sound_t *pickupSound;
+    CImage *m_frames[GEM_ANIM_IDLE_FRAMES + GEM_ANIM_PICKUP_FRAMES];
+    CSound *m_pickup_sound;
 
-    uint64_t pickupTime;
-    bool pickedUp;
-    double gameTime;
-    
-    int getCurrentFrame();
-
+    uint64_t m_pickup_time;
+    bool m_picked_up;
+    double m_game_time;
 public:
-    Gem(GameSystems systems);
+    CGem(GameSystems systems);
     void pickup();
     void logic(double dt) override;
-    void draw(Graphics *graphics) override;
+    void draw(CGraphics *graphics) override;
 };

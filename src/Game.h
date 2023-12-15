@@ -7,34 +7,42 @@
 #include "Player.h"
 #include "Input.h"
 #include "GameSystems.h"
+#include "EntityManager.h"
+#include "AssetManager.h"
 
-class Game {
+class CGame {
 private:
-    SDL_Window* window;
+    // VIDEO
+    SDL_Window* m_window;
 
-    Audio* audio;
-    Graphics* graphics;
-    Input input;
-    GameSystems systems;
+    // Meta state
+    CGraphics* m_graphics;
+    CInput m_input;
+    CEntityManager m_entities;
+    CAssetManager m_assets;
 
-    std::vector<Entity*> entities;
-    Player* mainPlayer;
-    image_t* background;
+    // Cache of systems entities have access to
+    GameSystems m_systems;
 
-    bool inited;
-    bool quit;
+    // Level state (TODO: remove by integrating into world/entities)
+    CPlayer* m_main_player;
+    CImage* m_background;
 
-    int framesCounted;
-    uint64_t ticks;
-    Uint64 frametime_now;
-    Uint64 frametime_last;
-    Uint64 performanceFrequency;
+    // Basic state
+    bool m_inited;
+    bool m_quit;
 
-    Game() = default;
+    // Time & performance metrics
+    int m_frames_counted;
+    uint64_t m_ticks;
+    Uint64 m_frametime_last;
+    Uint64 m_performance_frequency;
+
+    CGame();
 
 public:
-    ~Game();
-    static Game* init();
+    ~CGame();
+    static CGame* init();
     void start();
     bool run();
 };

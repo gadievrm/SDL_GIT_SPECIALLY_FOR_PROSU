@@ -1,107 +1,146 @@
 #include <iostream>
 #include "Game.h"
 #include "Gem.h"
-#include <SDL2/SDL_mixer.h>
+
+#include "ImageAssetLoader.h"
+#include "SoundAssetLoader.h"
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 
-Game* Game::init() {
-    Game* game = new Game();
+CGame::CGame() : m_inited(false) {}
 
-    game->window = SDL_CreateWindow("Almost Valorant", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+CGame* CGame::init() {
+    CGame* game = new CGame();
 
-    if (game->window == NULL) {
+    game->m_window = SDL_CreateWindow("Almost Valorant", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+
+    if (game->m_window == nullptr) {
         std::cerr << "Window could not be created! SDL_Error:" << SDL_GetError() << std::endl;
         delete game;
-        return NULL;
+        return nullptr;
     }
 
-    game->graphics = Graphics::init(game->window);
+    game->m_graphics = CGraphics::init(game->m_window);
 
-    game->audio = Audio::init();
-
-    game->systems = {
-        .input    = &game->input   ,
-        .graphics =  game->graphics,
-        .audio    =  game->audio
+    game->m_systems = {
+        .input          = &game->m_input    ,
+        .graphics       =  game->m_graphics ,
+        .audio          =  CAudio::init()   ,
+        .entities       = &game->m_entities ,
+        .assets         = &game->m_assets
     };
 
-    game->inited = true;
+    game->m_assets.addLoader(*new CImageAssetLoader(game->m_graphics->getRenderer()));
+    game->m_assets.addLoader(*new CSoundAssetLoader());
+
+    game->m_inited = true;
 
     return game;
 }
 
-Game::~Game() {
-    if (!inited) return;
+CGame::~CGame() {
+    if (!m_inited) return;
 
-    delete graphics;
-    SDL_DestroyWindow(window);
+    delete m_graphics;
+    SDL_DestroyWindow(m_window);
 }
 
-void Game::start() {
-    if (!inited) {
+void CGame::start() {
+    if (!m_inited) {
         return;
     }
 
-    quit = false;
-    ticks = SDL_GetTicks64();
-    framesCounted = 0;
-    frametime_now = SDL_GetPerformanceCounter();
-    frametime_last = 0;
-    performanceFrequency = SDL_GetPerformanceFrequency();
+    m_quit = false;
+    m_ticks = SDL_GetTicks64();
+    m_frames_counted = 0;
+    m_frametime_last = SDL_GetPerformanceCounter();
+    m_performance_frequency = SDL_GetPerformanceFrequency();
 
-    background = graphics->loadImage("data/gfx/environment/bg/back.png");
-    mainPlayer = new Player(systems);
-    mainPlayer->setImage(graphics->loadImage("data/gfx/sprites/player/idle/player-idle-1.png"));
-    mainPlayer->setPosX(SCREEN_WIDTH  / 2 - mainPlayer->getImage()->w / 2);
-    mainPlayer->setPosY(SCREEN_HEIGHT / 2 - mainPlayer->getImage()->h / 2);
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    //                     WORLD LOADING
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    m_background = static_cast<CImage*>(m_assets.fetchAsset(ASSET_TYPE_BITMAP, "data/gfx/environment/bg/back.png"));
 
-    entities.push_back(mainPlayer);
+    m_main_player = new CPlayer(m_systems);
+    m_main_player->setPosX(SCREEN_WIDTH  / 2 - m_main_player->getImage()->getWidth() / 2);
+    m_main_player->setPosY(SCREEN_HEIGHT / 2 - m_main_player->getImage()->getHeight() / 2);
 
-    Gem *gem = new Gem(systems);
-    gem->setPosX(100);
-    gem->setPosY(100);
-    entities.push_back(gem);
+    m_entities.addEntityWithName("000player", *m_main_player);
+
+    {
+        auto width    = 1;
+        auto height   = 1;
+        auto x_offset = 120;
+        auto y_offset = 120;
+        auto x_gap    = 30;
+        auto y_gap    = 30;
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                CGem *gem = new CGem(m_systems);
+                gem->setPosX(x_offset + x_gap * i);
+                gem->setPosY(y_offset + y_gap * j);
+                m_entities.addEntity(*gem);
+            }
+        }
+    }
 }
 
-bool Game::run() {
-    if (quit || !inited) {
+bool CGame::run() {
+    if (m_quit || !m_inited) {
         return false;
     }
 
-    frametime_last = frametime_now;
-    frametime_now = SDL_GetPerformanceCounter();
-
-    double deltaTime = (frametime_now - frametime_last) * 800.0 / performanceFrequency;
-
-    if (SDL_GetTicks64() - ticks > 1000) {
-        std::cout << "FPS: " << framesCounted << std::endl;
-        framesCounted = 0;
-        ticks = SDL_GetTicks64();
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    //                  TIME & PERFORMANCE
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    double frametime_now = SDL_GetPerformanceCounter();
+    double delta_time = (frametime_now - m_frametime_last) * 1000.0 / m_performance_frequency;
+    m_frametime_last = frametime_now;
+    if (SDL_GetTicks64() - m_ticks > 1000) {
+        m_frames_counted = 0;
+        m_ticks = SDL_GetTicks64();
     }
+    m_frames_counted++;
 
-    framesCounted++;
-
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    //                        INPUT
+    // -----------------------------------------------------
+    // -----------------------------------------------------
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
-        if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP) input.processKeyEvent(e);
+        if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP) m_input.processKeyEvent(e);
 
         if ((e.key.keysym.scancode == SDL_SCANCODE_ESCAPE) || e.type == SDL_QUIT) {
-            quit = true;
+            m_quit = true;
         }
     }
 
-    for (auto entity : entities) {
-        entity->logic(deltaTime);
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    //                      PROCESSING
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    for (auto entity : m_entities.getAllEntities()) {
+        entity->logic(delta_time);
     }
 
-    graphics->drawImageFullscreen(background);
-    for (auto entity : entities) {
-        entity->draw(graphics);
+    m_graphics->drawImageFullscreen(m_background);
+    for (auto entity : m_entities.getAllEntities()) {
+        entity->draw(m_graphics);
     }
 
-    graphics->present();
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    //                       OUTPUT
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    m_graphics->present();
 
-    return !quit;
+    return !m_quit;
 }

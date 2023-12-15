@@ -1,29 +1,29 @@
 #include "Input.h"
 
-Input::Input() : aKeyPressed(false), wKeyPressed(false), sKeyPressed(false), dKeyPressed(false) {}
+CInput::CInput() : a_key_pressed(false), w_key_pressed(false), s_key_pressed(false), d_key_pressed(false) {}
 
-void Input::processKeyEvent(SDL_Event& e) {
+void CInput::processKeyEvent(SDL_Event& e) {
     bool pressed = e.type == SDL_KEYDOWN;
     int scancode = e.key.keysym.scancode;
 
-    if (scancode == SDL_SCANCODE_A) aKeyPressed = pressed;
-    if (scancode == SDL_SCANCODE_W) wKeyPressed = pressed;
-    if (scancode == SDL_SCANCODE_S) sKeyPressed = pressed;
-    if (scancode == SDL_SCANCODE_D) dKeyPressed = pressed;
+    if (scancode == SDL_SCANCODE_A) a_key_pressed = pressed;
+    if (scancode == SDL_SCANCODE_W) w_key_pressed = pressed;
+    if (scancode == SDL_SCANCODE_S) s_key_pressed = pressed;
+    if (scancode == SDL_SCANCODE_D) d_key_pressed = pressed;
 }
 
-bool Input::getAKeyPressed() {
-    return aKeyPressed;
+bool CInput::getAKeyPressed() {
+    return a_key_pressed;
 }
 
-bool Input::getWKeyPressed() {
-    return wKeyPressed;
+bool CInput::getWKeyPressed() {
+    return w_key_pressed;
 }
 
-bool Input::getSKeyPressed() {
-    return sKeyPressed;
+bool CInput::getSKeyPressed() {
+    return s_key_pressed;
 }
 
-bool Input::getDKeyPressed() {
-    return dKeyPressed;
+bool CInput::getDKeyPressed() {
+    return d_key_pressed;
 }
