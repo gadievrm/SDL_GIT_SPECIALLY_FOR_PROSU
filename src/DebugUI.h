@@ -7,6 +7,7 @@
 class CDebugUI {
 private:
     ImGuiContext* m_ctx;
+    ImGuiIO *m_io;
     SDL_Window* m_window;
     CDebugUI() = default;
 public:
@@ -14,5 +15,7 @@ public:
     static CDebugUI* init(SDL_Window *window, SDL_Renderer *renderer);
     void beginFrame();
     void handleEvent(SDL_Event &e);
+    bool isTakingMouse();
+    bool isTakingKeyboard();
     void endFrame();
 };

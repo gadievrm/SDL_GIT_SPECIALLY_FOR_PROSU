@@ -24,7 +24,8 @@ CFLAGS = $(INCLUDE_DIRS) $(LIBS)
 
 ###############
 #### RULES ####
-###############
+###############	
+
 # src/.cpp -> build/.o  #
 $(BUILD_DIR)/%.o: $(SOURCE_DIR)/%.cpp $(HEADERS)
 	$(CPP) $(CFLAGS) -c $< -o $@
@@ -33,16 +34,21 @@ $(BUILD_DIR)/imgui/%.o: imgui/%.cpp $(HEADERS)
 	$(CPP) $(CFLAGS) -c $< -o $@
 
 #     Main    #
-$(TARGET): $(OBJS) Makefile
+$(TARGET): $(BUILD_DIR) $(BUILD_DIR)/imgui $(OBJS) Makefile
 	$(CPP) -o $(TARGET) $(BUILD_DIR)/*.o $(BUILD_DIR)/imgui/*.o $(LFLAGS)
+
+$(BUILD_DIR):
+	mkdir $(BUILD_DIR)
+
+$(BUILD_DIR)/imgui:
+	mkdir $(BUILD_DIR)/imgui
 
 ################
 ### COMMANDS ###
 ################
 # Remove temp files
 clean:
-	rm -f $(BUILD_DIR)/*.o
-	rm -f $(TARGET)
+	rm -rf $(BUILD_DIR)
 
 # Launch
 run: $(TARGET)

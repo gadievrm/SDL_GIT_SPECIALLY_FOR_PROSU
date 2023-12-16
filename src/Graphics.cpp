@@ -2,9 +2,10 @@
 #include "Graphics.h"
 
 CGraphics* CGraphics::init(SDL_Window *window) {
-
 	CGraphics *graphics = new CGraphics();
 	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	
+	SDL_RenderSetScale(renderer, 1024.0/640.0, 768.0/480.0);
 	SDL_RenderSetVSync(renderer, 1);
 
 	graphics->m_renderer = renderer;

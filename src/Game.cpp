@@ -7,8 +7,8 @@
 
 #include "DebugUI.h"
 
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
+const int SCREEN_WIDTH = 1024;
+const int SCREEN_HEIGHT = 768;
 
 CGame::CGame() : m_inited(false) {}
 
@@ -122,7 +122,13 @@ bool CGame::run() {
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
         m_debug_ui->handleEvent(e);
-        if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP) m_input.processKeyEvent(e);
+        if (e.type == SDL_MOUSEMOTION) {
+            SDL_MouseMotionEvent &ev_mouse_motion = e.motion;
+            ev_mouse_motion.x *= 1024;
+        }
+        if (!m_debug_ui->isTakingKeyboard() && e.type == SDL_KEYDOWN || e.type == SDL_KEYUP) {
+            m_input.processKeyEvent(e);
+        }
 
         if ((e.key.keysym.scancode == SDL_SCANCODE_ESCAPE) || e.type == SDL_QUIT) {
             m_quit = true;

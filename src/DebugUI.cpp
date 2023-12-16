@@ -18,6 +18,7 @@ CDebugUI *CDebugUI::init(SDL_Window *window, SDL_Renderer *renderer) {
     CDebugUI *ui = new CDebugUI();
     ui->m_window = window;
     ui->m_ctx = ctx;
+    ui->m_io = &ImGui::GetIO();
     return ui;
 }
 
@@ -35,6 +36,14 @@ void CDebugUI::beginFrame() {
 
 void CDebugUI::handleEvent(SDL_Event &e) {
     ImGui_ImplSDL2_ProcessEvent(&e);
+}
+
+bool CDebugUI::isTakingKeyboard() {
+    return m_io->WantCaptureKeyboard;
+}
+
+bool CDebugUI::isTakingMouse() {
+    return m_io->WantCaptureMouse;
 }
 
 void CDebugUI::endFrame() {
