@@ -11,13 +11,16 @@ class CGraphics {
 		CGraphics() = default;
 	public:
 		static CGraphics* init(SDL_Window *window);
+		~CGraphics();
+
 		void drawImageFullscreen(CImage *image);
 		void drawImage(CImage *image, int posX, int posY, bool flip = false);
 		void drawImageScaled(CImage *image, int posX, int posY, double w, double h, bool flip);
 		void present();
 		SDL_Renderer *getRenderer();
 
-		~CGraphics();
+		void addScaling();
+		void removeScaling();
 };
 
 class Animation {

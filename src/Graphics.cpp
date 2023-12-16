@@ -1,11 +1,12 @@
 #include <SDL_image.h>
 #include "Graphics.h"
+#include "GameSetup.h"
 
 CGraphics* CGraphics::init(SDL_Window *window) {
 	CGraphics *graphics = new CGraphics();
 	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	
-	SDL_RenderSetScale(renderer, 1024.0/640.0, 768.0/480.0);
+	graphics->addScaling();
 	SDL_RenderSetVSync(renderer, 1);
 
 	graphics->m_renderer = renderer;
@@ -39,4 +40,12 @@ void CGraphics::present() {
 
 SDL_Renderer* CGraphics::getRenderer() {
 	return m_renderer;
+}
+
+void CGraphics::removeScaling() {
+	SDL_RenderSetScale(m_renderer, 1, 1);
+}
+
+void CGraphics::addScaling() {
+	SDL_RenderSetScale(m_renderer, ((float) SCREEN_WIDTH) / GAME_WIDTH, ((float) SCREEN_HEIGHT) / GAME_HEIGHT);
 }

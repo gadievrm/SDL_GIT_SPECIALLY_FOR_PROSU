@@ -11,11 +11,14 @@ private:
     SDL_Window* m_window;
     CDebugUI() = default;
 public:
-    ~CDebugUI();
     static CDebugUI* init(SDL_Window *window, SDL_Renderer *renderer);
+    ~CDebugUI();
+
     void beginFrame();
     void handleEvent(SDL_Event &e);
     bool isTakingMouse();
     bool isTakingKeyboard();
     void endFrame();
+
+    
 };

@@ -3,16 +3,21 @@
 
 class CInput {
 private:
-    bool a_key_pressed;
-    bool w_key_pressed;
-    bool s_key_pressed;
-    bool d_key_pressed;
+    bool m_a_key_pressed;
+    bool m_w_key_pressed;
+    bool m_s_key_pressed;
+    bool m_d_key_pressed;
+    float m_mouse_x;
+    float m_mouse_y;
 
 public:
     CInput();
     void processKeyEvent(SDL_Event& e);
+    void processMouseEvent(SDL_Event& e);
     bool getAKeyPressed();
     bool getWKeyPressed();
     bool getSKeyPressed();
     bool getDKeyPressed();
+    float getMouseX();
+    float getMouseY();
 };

@@ -1,4 +1,5 @@
 #include <iostream>
+#include "GameSetup.h"
 #include "Game.h"
 #include "Gem.h"
 
@@ -6,9 +7,6 @@
 #include "SoundAssetLoader.h"
 
 #include "DebugUI.h"
-
-const int SCREEN_WIDTH = 1024;
-const int SCREEN_HEIGHT = 768;
 
 CGame::CGame() : m_inited(false) {}
 
@@ -70,8 +68,8 @@ void CGame::start() {
     m_background = static_cast<CImage*>(m_assets.fetchAsset(ASSET_TYPE_BITMAP, "data/gfx/environment/bg/back.png"));
 
     m_main_player = new CPlayer(m_systems);
-    m_main_player->setPosX(SCREEN_WIDTH  / 2 - m_main_player->getImage()->getWidth() / 2);
-    m_main_player->setPosY(SCREEN_HEIGHT / 2 - m_main_player->getImage()->getHeight() / 2);
+    m_main_player->setPosX(GAME_WIDTH  / 2 - m_main_player->getImage()->getWidth() / 2);
+    m_main_player->setPosY(GAME_HEIGHT / 2 - m_main_player->getImage()->getHeight() / 2);
     m_entities.addEntityWithName("000player", *m_main_player);
 
     {
@@ -122,12 +120,13 @@ bool CGame::run() {
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
         m_debug_ui->handleEvent(e);
-        if (e.type == SDL_MOUSEMOTION) {
-            SDL_MouseMotionEvent &ev_mouse_motion = e.motion;
-            ev_mouse_motion.x *= 1024;
-        }
+        
         if (!m_debug_ui->isTakingKeyboard() && e.type == SDL_KEYDOWN || e.type == SDL_KEYUP) {
             m_input.processKeyEvent(e);
+        }
+
+        if (!m_debug_ui->isTakingMouse()) {
+            m_input.processMouseEvent(e);
         }
 
         if ((e.key.keysym.scancode == SDL_SCANCODE_ESCAPE) || e.type == SDL_QUIT) {
@@ -154,7 +153,9 @@ bool CGame::run() {
         entity->draw(m_graphics);
     }
 
+    m_graphics->removeScaling();
     m_debug_ui->endFrame();
+    m_graphics->addScaling();
 
     m_graphics->present();
 
