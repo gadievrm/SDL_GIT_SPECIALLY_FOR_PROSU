@@ -9,8 +9,7 @@
 #include "GameSystems.h"
 #include "EntityManager.h"
 #include "AssetManager.h"
-
-#include <imgui.h>
+#include "DebugUI.h"
 
 class CGame {
 private:
@@ -18,7 +17,7 @@ private:
     SDL_Window* m_window;
 
     // Meta state
-    ImGuiContext *m_imgui_ctx;
+    CDebugUI* m_debug_ui;
     CGraphics* m_graphics;
     CInput m_input;
     CEntityManager m_entities;

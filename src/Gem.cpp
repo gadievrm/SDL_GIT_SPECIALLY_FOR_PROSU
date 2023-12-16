@@ -35,8 +35,6 @@ static int getCurrentFrame(double game_time, bool picked_up, double pickup_time)
 
 void CGem::logic(double dt) {
     m_game_time += dt;
-
-    if (m_game_time >= 5000) pickup();
 }
 
 void CGem::draw(CGraphics *graphics) {
