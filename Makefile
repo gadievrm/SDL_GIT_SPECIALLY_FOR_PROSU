@@ -3,7 +3,7 @@
 ###############
 SOURCE_DIR  = src
 BUILD_DIR   = build
-INCLUDE_DIRS = -Iinclude/SDL2 -Iinclude/imgui
+INCLUDE_DIRS = -Iinclude/nlohmann -Iinclude/SDL2 -Iinclude/imgui
 LIBRARY_DIR = lib
 
 ###############
