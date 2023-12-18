@@ -1,4 +1,5 @@
 *.o
 *.exe
+build/**
 .vscode/settings.json
 imgui.ini
