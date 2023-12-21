@@ -3,7 +3,7 @@ and may not be redistributed without written permission.*/
 
 // СНАЧАЛА ИВЕНТЫ, ПОТОМ ЛОГИКА, ПОТОМ РЕНДЕР.
 
-//Using SDL and standard IO
+// Using SDL and standard IO
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include <SDL_image.h>
@@ -29,6 +29,32 @@ static int initAllOfThisShit(){
 
 	return 0;
 }
+
+#include <json.h>
+#include <fstream>
+using json = nlohmann::json;
+
+
+// int main(int argc, char **argv) {
+// 	std::ifstream f("test.json");
+// 	json data = json::parse(f);
+
+// 	try {
+// 		auto arr = data["arr"];
+// 		if (arr.type() == json::value_t::array) {
+// 			std::cout << "yay" << std::endl;
+// 		} else {
+// 			if (arr.type() == json::value_t::null) {
+// 				std::cout << "IS NULL" << std::endl;
+// 			}
+// 			std::cout << "nay" << std::endl;
+// 		}
+// 	} catch(json::exception& ex) {
+// 		std::cout << "EXCEPPETIONONEOINE! " << ex.what() << std::endl;
+// 	}
+
+// 	std::cout << "Hello new main!" << std::endl;
+// }
 
 int main(int argc, char **argv) {
 	if (initAllOfThisShit() != 0) return 1;
