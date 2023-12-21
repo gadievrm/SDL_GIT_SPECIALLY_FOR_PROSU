@@ -2,7 +2,7 @@
 
 CSound::CSound(std::optional<std::string> path, Mix_Chunk *chunk) : m_chunk(chunk)
 {
-    m_type = ASSET_TYPE_SOUND;
+    m_type = EAsset::Sound;
     m_path = path;
 }
 

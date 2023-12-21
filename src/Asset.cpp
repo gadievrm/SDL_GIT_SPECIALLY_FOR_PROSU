@@ -1,6 +1,6 @@
 #include "Asset.h"
 
-const EAssetType ACAsset::getType() {
+const EAsset ACAsset::getType() {
     return m_type;
 }
 

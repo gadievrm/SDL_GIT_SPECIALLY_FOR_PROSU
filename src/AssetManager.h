@@ -13,5 +13,5 @@ private:
 public:
     CAssetManager();
     void addLoader(IAssetLoader &loader);
-    ACAsset* fetchAsset(EAssetType type, const std::string &path);
+    ACAsset* fetchAsset(EAsset type, const std::string &path);
 };

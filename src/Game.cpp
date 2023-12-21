@@ -62,10 +62,10 @@ void CGame::start() {
 
     // -----------------------------------------------------
     // -----------------------------------------------------
-    //                     WORLD LOADING
+    //                     MAP LOADING
     // -----------------------------------------------------
     // -----------------------------------------------------
-    m_background = static_cast<CImage*>(m_assets.fetchAsset(ASSET_TYPE_BITMAP, "data/gfx/environment/bg/back.png"));
+    m_background = static_cast<CImage*>(m_assets.fetchAsset(EAsset::Bitmap, "data/gfx/environment/bg/back.png"));
 
     m_main_player = new CPlayer(m_systems);
     m_main_player->setPosX(GAME_WIDTH  / 2 - m_main_player->getImage()->getWidth() / 2);

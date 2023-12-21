@@ -3,8 +3,8 @@
 CImageAssetLoader::CImageAssetLoader(SDL_Renderer *renderer) : m_renderer(renderer)
 {}
 
-EAssetType CImageAssetLoader::getType() const {
-    return ASSET_TYPE_BITMAP;
+EAsset CImageAssetLoader::getType() const {
+    return EAsset::Bitmap;
 }
 
 bool CImageAssetLoader::doesPathMatch(const std::string& path) const {

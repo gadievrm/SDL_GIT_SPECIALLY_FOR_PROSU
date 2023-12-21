@@ -2,21 +2,21 @@
 #include <string>
 #include <optional>
 
-enum EAssetType {
-    ASSET_TYPE_SOUND = 0,
-    ASSET_TYPE_MUSIC,
-    ASSET_TYPE_BITMAP,
-    ASSET_TYPE_MAP,
-    ASSET_TYPE_ANIMATION,
-    ASSET_TYPE_COUNT
+enum class EAsset {
+    Sound = 0,
+    Music,
+    Bitmap,
+    Map,
+    Animation,
+    Count
 };
 
 class ACAsset {
 protected:
-    EAssetType m_type;
+    EAsset m_type;
     std::optional<std::string> m_path;
     
 public:
-    const EAssetType getType();
+    const EAsset getType();
     const std::optional<std::string>& getPath();
 };

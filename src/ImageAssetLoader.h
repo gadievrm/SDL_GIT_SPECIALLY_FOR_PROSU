@@ -9,7 +9,7 @@ private:
     SDL_Renderer *m_renderer;
 public:
     CImageAssetLoader(SDL_Renderer *renderer);
-    EAssetType getType() const override;
+    EAsset getType() const override;
     bool doesPathMatch(const std::string& path) const override;
     ACAsset* loadAsset(const std::string& path) override;
 };

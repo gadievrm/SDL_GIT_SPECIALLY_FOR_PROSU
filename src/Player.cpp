@@ -16,7 +16,7 @@ CPlayer::CPlayer(TGameSystems systems) {
     m_flipX = false;
     m_image = NULL;
 
-    m_image = static_cast<CImage*>(systems.assets->fetchAsset(ASSET_TYPE_BITMAP, "data/gfx/sprites/player/idle/player-idle-1.png"));
+    m_image = static_cast<CImage*>(systems.assets->fetchAsset(EAsset::Bitmap, "data/gfx/sprites/player/idle/player-idle-1.png"));
 }
 
 bool CPlayer::getFlipX() {

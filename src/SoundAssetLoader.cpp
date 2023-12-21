@@ -2,8 +2,8 @@
 #include "SoundAssetLoader.h"
 #include "Audio.h"
 
-EAssetType CSoundAssetLoader::getType() const {
-    return ASSET_TYPE_SOUND;
+EAsset CSoundAssetLoader::getType() const {
+    return EAsset::Sound;
 }
 
 bool CSoundAssetLoader::doesPathMatch(const std::string& path) const {

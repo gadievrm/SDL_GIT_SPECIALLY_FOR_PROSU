@@ -8,15 +8,15 @@ CGem::CGem(TGameSystems systems) {
 
     for (int i = 1; i <= GEM_ANIM_IDLE_FRAMES; i++) {
         sprintf(path, "data/gfx/sprites/gem/gem-%d.png", i);
-        m_frames[loadedFrame++] = static_cast<CImage*>(assets->fetchAsset(ASSET_TYPE_BITMAP, path));
+        m_frames[loadedFrame++] = static_cast<CImage*>(assets->fetchAsset(EAsset::Bitmap, path));
     }
 
     for (int i = 1; i <= GEM_ANIM_PICKUP_FRAMES; i++) {
         sprintf(path, "data/gfx/sprites/item-feedback/item-feedback-%d.png", i);
-        m_frames[loadedFrame++] = static_cast<CImage*>(assets->fetchAsset(ASSET_TYPE_BITMAP, path));
+        m_frames[loadedFrame++] = static_cast<CImage*>(assets->fetchAsset(EAsset::Bitmap, path));
     }
 
-    m_pickup_sound = static_cast<CSound*>(assets->fetchAsset(ASSET_TYPE_SOUND, "data/sfx/pickup_bonus.wav"));
+    m_pickup_sound = static_cast<CSound*>(assets->fetchAsset(EAsset::Sound, "data/sfx/pickup_bonus.wav"));
 
     m_pickup_time = 0;
     m_picked_up = false;
