@@ -11,6 +11,7 @@
 #include "AssetManager.h"
 #include "DebugUI.h"
 #include "Tileset.h"
+#include "Camera.h"
 
 class CGame {
 private:
@@ -28,6 +29,7 @@ private:
     std::string m_map_name;
     CTileset *m_tileset;
     CPlayer* m_main_player;
+    CCamera m_camera;
 
     // Cache of systems entities have access to
     TGameSystems m_systems;

@@ -19,6 +19,7 @@ bool CTilesetAssetLoader::doesPathMatch(const std::string& path) const {
     return true;
 }
 
+#include <iostream>
 ACAsset* CTilesetAssetLoader::loadAsset(CAssetManager &assets, const std::string& path) {
     std::ifstream f(path);
     json data = json::parse(f);
@@ -33,6 +34,31 @@ ACAsset* CTilesetAssetLoader::loadAsset(CAssetManager &assets, const std::string
 
 	CImage *tileset_image = static_cast<CImage*>(assets.fetchAsset(EAsset::Image, tileset_file));
     CTileset *tileset = new CTileset(path, *tileset_image, tileset_name, tile_size);
+
+    json jmats = data["materials"];
+    if (jmats.type() == json::value_t::object) {
+        std::map<std::string, std::string> mats = jmats;
+
+        for (auto& elem : mats) {
+            std::string key = elem.first;
+            std::string value = elem.second;
+
+            ETileMaterial material = ETileMaterial::None;
+            int tile = std::stoi(key);
+
+            if (value == "wall") {
+                material = ETileMaterial::Wall;
+            } else if (value == "panel") {
+                material = ETileMaterial::Panel;
+            } else if (value == "dirt") {
+                material = ETileMaterial::Dirt;
+            } else if (value == "wood") {
+                material = ETileMaterial::Wood;
+            }
+
+            tileset->setMaterial(tile, material);
+        }
+    }
 
 	return tileset;
 }

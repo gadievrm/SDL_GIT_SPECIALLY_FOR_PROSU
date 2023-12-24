@@ -72,10 +72,9 @@ void CGame::start() {
     // -----------------------------------------------------
     MapLoad(m_systems, m_assets, "data/maps/first.json", m_map_name, m_entities);
     m_main_player = static_cast<CPlayer*>(m_entities.findEntitiesByName("player0")[0]);
+    m_camera.followEntity(m_main_player, true);
 }
 
-static float cameraX = 0;
-static float cameraY = 0;
 bool CGame::run() {
     if (m_quit || !m_inited) {
         return false;
@@ -131,14 +130,15 @@ bool CGame::run() {
     for (auto entity : m_entities.getAllEntities()) {
         entity->logic(delta_time);
     }
+    m_camera.update(delta_time);
 
     // -----------------------------------------------------
     // -----------------------------------------------------
     //                       OUTPUT
     // -----------------------------------------------------
     // -----------------------------------------------------
-    cameraX = m_main_player->getPosX() - GAME_WIDTH/2;
-    cameraY = m_main_player->getPosY() - GAME_HEIGHT/2;
+    float cameraX, cameraY;
+    m_camera.getPos(cameraX, cameraY);
     m_graphics->setOffset(-cameraX, -cameraY);
     for (auto entity : m_entities.getAllEntities()) {
         entity->draw(m_graphics);

@@ -1,5 +1,27 @@
 {
 	"tileset_file": "aztec.bmp",
 	"tileset_name": "Aztec (CS2D)",
-	"tile_size": 32
+	"tile_size": 32,
+	"materials": {
+		"1": "wall",
+		"2": "wall",
+		"3": "wall",
+		"4": "wall",
+		"5": "wall",
+		"6": "wall",
+		"7": "wall",
+		"8": "wall",
+		"32": "panel",
+		"33": "panel",
+		"34": "panel",
+		"35": "panel",
+		"36": "dirt",
+		"37": "dirt",
+		"38": "dirt",
+		"39": "dirt",
+		"40": "dirt",
+		"45": "wood",
+		"46": "wood",
+		"47": "wood"
+	}
 }

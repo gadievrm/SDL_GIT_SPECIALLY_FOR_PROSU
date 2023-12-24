@@ -9,17 +9,18 @@ LIBRARY_DIR = lib
 ###############
 #### FILES ####
 ###############
-TARGET = final/main.exe
+TARGET = final/ingusheta
 OBJS = $(addprefix $(BUILD_DIR)/,$(notdir $(addsuffix .o,$(basename $(wildcard $(SOURCE_DIR)/*.cpp))))) # src/%.cpp > build/%.o
 OBJS += $(addprefix $(BUILD_DIR)/imgui/,$(notdir $(addsuffix .o,$(basename $(wildcard imgui/*.cpp)))))
 HEADERS = $(wildcard $(SOURCE_DIR)/*.h)
+ICON = extra/icon.res
 
 ###############
 # COMPILATION #
 ###############
 CPP = g++
 LIBS = -L$(LIBRARY_DIR) -lSDL2Main -lSDL2_Mixer -lSDL2_Image -lSDL2
-LFLAGS = $(LIBS) # -mwindows ## To disable console
+LFLAGS = $(LIBS) $(ICON) # -mwindows ## To disable console
 CFLAGS = $(INCLUDE_DIRS)
 
 ###############

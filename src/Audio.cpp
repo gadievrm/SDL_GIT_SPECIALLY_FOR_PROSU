@@ -17,6 +17,8 @@ CAudio *CAudio::init() {
 
 	Mix_AllocateChannels(32);
 
+    Mix_MasterVolume(MIX_MAX_VOLUME / 3);
+
     CAudio *audio = new CAudio();
 
     return audio;

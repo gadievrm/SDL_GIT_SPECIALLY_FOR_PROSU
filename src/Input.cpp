@@ -1,6 +1,6 @@
 #include "Input.h"
 
-CInput::CInput() : m_a_key_pressed(false), m_w_key_pressed(false), m_s_key_pressed(false), m_d_key_pressed(false), m_mouse_x(0.0f), m_mouse_y(0.0f) {}
+CInput::CInput() : m_a_key_pressed(false), m_w_key_pressed(false), m_s_key_pressed(false), m_d_key_pressed(false), m_shift_key_pressed(false), m_mouse_x(0.0f), m_mouse_y(0.0f) {}
 
 void CInput::processKeyEvent(SDL_Event& e) {
     bool pressed = e.type == SDL_KEYDOWN;
@@ -10,6 +10,7 @@ void CInput::processKeyEvent(SDL_Event& e) {
     if (scancode == SDL_SCANCODE_W) m_w_key_pressed = pressed;
     if (scancode == SDL_SCANCODE_S) m_s_key_pressed = pressed;
     if (scancode == SDL_SCANCODE_D) m_d_key_pressed = pressed;
+    if (scancode == SDL_SCANCODE_LSHIFT || scancode == SDL_SCANCODE_RSHIFT) m_shift_key_pressed = pressed; 
 }
 
 void CInput::processMouseEvent(SDL_Event& e, float scaleX, float scaleY) {
@@ -34,6 +35,10 @@ bool CInput::getSKeyPressed() {
 
 bool CInput::getDKeyPressed() {
     return m_d_key_pressed;
+}
+
+bool CInput::getShiftKeyPressed() {
+    return m_shift_key_pressed;
 }
 
 float CInput::getMouseX() {

@@ -7,6 +7,7 @@ private:
     bool m_w_key_pressed;
     bool m_s_key_pressed;
     bool m_d_key_pressed;
+    bool m_shift_key_pressed;
     float m_mouse_x;
     float m_mouse_y;
 
@@ -18,6 +19,7 @@ public:
     bool getWKeyPressed();
     bool getSKeyPressed();
     bool getDKeyPressed();
+    bool getShiftKeyPressed();
     float getMouseX();
     float getMouseY();
 };
