@@ -20,7 +20,7 @@ HEADERS = $(wildcard $(SOURCE_DIR)/*.h)
 CPP = g++
 LIBS = -L$(LIBRARY_DIR) -lSDL2Main -lSDL2_Mixer -lSDL2_Image -lSDL2
 LFLAGS = $(LIBS) # -mwindows ## To disable console
-CFLAGS = $(INCLUDE_DIRS) $(LIBS)
+CFLAGS = $(INCLUDE_DIRS)
 
 ###############
 #### RULES ####
