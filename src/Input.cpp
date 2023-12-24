@@ -12,11 +12,11 @@ void CInput::processKeyEvent(SDL_Event& e) {
     if (scancode == SDL_SCANCODE_D) m_d_key_pressed = pressed;
 }
 
-void CInput::processMouseEvent(SDL_Event& e) {
+void CInput::processMouseEvent(SDL_Event& e, float scaleX, float scaleY) {
     if (e.type == SDL_MOUSEMOTION) {
         SDL_MouseMotionEvent& ev_mouse_motion = e.motion;
-        m_mouse_x = ev_mouse_motion.x;
-        m_mouse_y = ev_mouse_motion.y;
+        m_mouse_x = ev_mouse_motion.x * scaleX;
+        m_mouse_y = ev_mouse_motion.y * scaleY;
     }
 }
 
@@ -34,4 +34,12 @@ bool CInput::getSKeyPressed() {
 
 bool CInput::getDKeyPressed() {
     return m_d_key_pressed;
+}
+
+float CInput::getMouseX() {
+    return m_mouse_x;
+}
+
+float CInput::getMouseY() {
+    return m_mouse_y;
 }

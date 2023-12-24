@@ -10,6 +10,7 @@
 #include "EntityManager.h"
 #include "AssetManager.h"
 #include "DebugUI.h"
+#include "Tileset.h"
 
 class CGame {
 private:
@@ -23,12 +24,13 @@ private:
     CEntityManager m_entities;
     CAssetManager m_assets;
 
+    // Game-specific stuff
+    std::string m_map_name;
+    CTileset *m_tileset;
+    CPlayer* m_main_player;
+
     // Cache of systems entities have access to
     TGameSystems m_systems;
-
-    // Level state (TODO: remove by integrating into world/entities)
-    CPlayer* m_main_player;
-    CImage* m_background;
 
     // Basic state
     bool m_inited;

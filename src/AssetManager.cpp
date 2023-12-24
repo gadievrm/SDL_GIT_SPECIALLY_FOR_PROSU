@@ -13,7 +13,7 @@ ACAsset* CAssetManager::fetchAsset(EAsset type, const std::string& path) {
     asset = m_assets[unique_path];
 
     if (asset == NULL) {
-        asset = m_asset_loaders[int(type)]->loadAsset(unique_path);
+        asset = m_asset_loaders[int(type)]->loadAsset(*this, unique_path);
         m_assets[unique_path] = asset;
     }
     

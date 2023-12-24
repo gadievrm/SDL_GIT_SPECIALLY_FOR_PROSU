@@ -7,14 +7,14 @@ CImage::CImage(std::optional<std::string> path, SDL_Texture *texture, int width,
     m_height = height;
 }
 
-int CImage::getWidth() {
+int CImage::getWidth() const {
     return m_width;
 }
 
-int CImage::getHeight() {
+int CImage::getHeight() const {
     return m_height;
 }
 
-SDL_Texture*& CImage::getTexture() {
-    return m_texture;
+SDL_Texture*& CImage::getTexture() const {
+    return const_cast<SDL_Texture*&>(m_texture);
 }

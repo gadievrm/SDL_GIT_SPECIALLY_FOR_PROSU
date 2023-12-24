@@ -4,7 +4,7 @@ CImageAssetLoader::CImageAssetLoader(SDL_Renderer *renderer) : m_renderer(render
 {}
 
 EAsset CImageAssetLoader::getType() const {
-    return EAsset::Bitmap;
+    return EAsset::Image;
 }
 
 bool CImageAssetLoader::doesPathMatch(const std::string& path) const {
@@ -12,7 +12,7 @@ bool CImageAssetLoader::doesPathMatch(const std::string& path) const {
     return false;
 }
 
-ACAsset* CImageAssetLoader::loadAsset(const std::string& path) {
+ACAsset* CImageAssetLoader::loadAsset(CAssetManager &assets, const std::string& path) {
     SDL_Texture *texture;
 	SDL_Surface *surface = NULL;
 	surface = IMG_Load(path.c_str());

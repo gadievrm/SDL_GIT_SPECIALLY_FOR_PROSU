@@ -13,7 +13,7 @@ private:
 public:
     CInput();
     void processKeyEvent(SDL_Event& e);
-    void processMouseEvent(SDL_Event& e);
+    void processMouseEvent(SDL_Event& e, float scaleX, float scaleY);
     bool getAKeyPressed();
     bool getWKeyPressed();
     bool getSKeyPressed();

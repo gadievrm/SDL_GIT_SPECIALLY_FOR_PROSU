@@ -3,6 +3,9 @@
 #include <vector>
 #include <unordered_map>
 #include "Asset.h"
+
+class CAssetManager;
+class IAssetLoader;
 #include "AssetLoader.h"
 
 class CAssetManager {

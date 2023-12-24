@@ -1,6 +1,7 @@
 #include "EntityManager.h"
 
-void CEntityManager::addEntityWithName(const std::string &tag, ACEntity &entity) {
+void CEntityManager::addEntityWithName(const std::string& tag, ACEntity& entity) {
+    entity.setName(tag);
     m_entities.push_back(&entity);
     m_tags[tag].push_back(&entity);
 }

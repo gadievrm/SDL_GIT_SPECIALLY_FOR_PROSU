@@ -11,10 +11,10 @@ bool CSoundAssetLoader::doesPathMatch(const std::string& path) const {
     return false;
 }
 
-ACAsset* CSoundAssetLoader::loadAsset(const std::string& path) {
+ACAsset* CSoundAssetLoader::loadAsset(CAssetManager &assets, const std::string& path) {
     Mix_Chunk *chunk = Mix_LoadWAV(path.c_str());
 
-	std::cout << "CSoundAssetLoader::loadAsset(\"" << path << "\");" << std::endl;
+	// std::cout << "CSoundAssetLoader::loadAsset(\"" << path << "\");" << std::endl;
 
     if (chunk != NULL)
         return new CSound(path, chunk);

@@ -5,9 +5,10 @@
 enum class EAsset {
     Sound = 0,
     Music,
-    Bitmap,
+    Image,
     Map,
     Animation,
+    Tileset,
     Count
 };
 

@@ -8,12 +8,12 @@ CGem::CGem(TGameSystems systems) {
 
     for (int i = 1; i <= GEM_ANIM_IDLE_FRAMES; i++) {
         sprintf(path, "data/gfx/sprites/gem/gem-%d.png", i);
-        m_frames[loadedFrame++] = static_cast<CImage*>(assets->fetchAsset(EAsset::Bitmap, path));
+        m_frames[loadedFrame++] = static_cast<CImage*>(assets->fetchAsset(EAsset::Image, path));
     }
 
     for (int i = 1; i <= GEM_ANIM_PICKUP_FRAMES; i++) {
         sprintf(path, "data/gfx/sprites/item-feedback/item-feedback-%d.png", i);
-        m_frames[loadedFrame++] = static_cast<CImage*>(assets->fetchAsset(EAsset::Bitmap, path));
+        m_frames[loadedFrame++] = static_cast<CImage*>(assets->fetchAsset(EAsset::Image, path));
     }
 
     m_pickup_sound = static_cast<CSound*>(assets->fetchAsset(EAsset::Sound, "data/sfx/pickup_bonus.wav"));

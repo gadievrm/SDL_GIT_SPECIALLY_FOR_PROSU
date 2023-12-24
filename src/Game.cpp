@@ -5,6 +5,10 @@
 
 #include "ImageAssetLoader.h"
 #include "SoundAssetLoader.h"
+#include "TilesetAssetLoader.h"
+#include "Tileset.h"
+
+#include "Map.h"
 
 #include "DebugUI.h"
 
@@ -34,6 +38,7 @@ CGame* CGame::init() {
 
     game->m_assets.addLoader(*new CImageAssetLoader(renderer));
     game->m_assets.addLoader(*new CSoundAssetLoader());
+    game->m_assets.addLoader(*new CTilesetAssetLoader(renderer));
 
     game->m_debug_ui = CDebugUI::init(game->m_window, renderer);
 
@@ -65,31 +70,12 @@ void CGame::start() {
     //                     MAP LOADING
     // -----------------------------------------------------
     // -----------------------------------------------------
-    m_background = static_cast<CImage*>(m_assets.fetchAsset(EAsset::Bitmap, "data/gfx/environment/bg/back.png"));
-
-    m_main_player = new CPlayer(m_systems);
-    m_main_player->setPosX(GAME_WIDTH  / 2 - m_main_player->getImage()->getWidth() / 2);
-    m_main_player->setPosY(GAME_HEIGHT / 2 - m_main_player->getImage()->getHeight() / 2);
-    m_entities.addEntityWithName("000player", *m_main_player);
-
-    {
-        auto width    = 1;
-        auto height   = 1;
-        auto x_offset = 120;
-        auto y_offset = 120;
-        auto x_gap    = 30;
-        auto y_gap    = 30;
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                CGem *gem = new CGem(m_systems);
-                gem->setPosX(x_offset + x_gap * i);
-                gem->setPosY(y_offset + y_gap * j);
-                m_entities.addEntity(*gem);
-            }
-        }
-    }
+    MapLoad(m_systems, m_assets, "data/maps/first.json", m_map_name, m_entities);
+    m_main_player = static_cast<CPlayer*>(m_entities.findEntitiesByName("player0")[0]);
 }
 
+static float cameraX = 0;
+static float cameraY = 0;
 bool CGame::run() {
     if (m_quit || !m_inited) {
         return false;
@@ -110,7 +96,7 @@ bool CGame::run() {
     m_frames_counted++;
 
     m_debug_ui->beginFrame();
-    ImGui::ShowDemoWindow();
+    // ImGui::ShowDemoWindow();
 
     // -----------------------------------------------------
     // -----------------------------------------------------
@@ -126,7 +112,10 @@ bool CGame::run() {
         }
 
         if (!m_debug_ui->isTakingMouse()) {
-            m_input.processMouseEvent(e);
+            float scaleX;
+            float scaleY;
+            m_graphics->getScaling(scaleX, scaleY);
+            m_input.processMouseEvent(e, 1 / scaleX, 1 / scaleY);
         }
 
         if ((e.key.keysym.scancode == SDL_SCANCODE_ESCAPE) || e.type == SDL_QUIT) {
@@ -148,7 +137,9 @@ bool CGame::run() {
     //                       OUTPUT
     // -----------------------------------------------------
     // -----------------------------------------------------
-    m_graphics->drawImageFullscreen(m_background);
+    cameraX = m_main_player->getPosX() - GAME_WIDTH/2;
+    cameraY = m_main_player->getPosY() - GAME_HEIGHT/2;
+    m_graphics->setOffset(-cameraX, -cameraY);
     for (auto entity : m_entities.getAllEntities()) {
         entity->draw(m_graphics);
     }
