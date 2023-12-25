@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "Image.h"
 #include "Tileset.h"
+#include <optional>
 
 class CWorld : public ACEntity {
 private:
@@ -14,6 +15,8 @@ private:
 public:
     CWorld(CTileset &tileset, CImage& background, uint16_t width, uint16_t height);
     void putTiles(const std::vector<uint16_t>& tiles);
+    void init(TGameSystems systems) override;
     void logic(double dt) override;
     void draw(CGraphics *graphics) override;
+    std::optional<ETileMaterial> getTileMaterialAt(float x, float y);
 };

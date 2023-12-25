@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
 #include <unordered_map>
+
+class CEntityManager;
 #include "Entity.h"
 
 class CEntityManager {

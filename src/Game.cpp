@@ -17,7 +17,7 @@ CGame::CGame() : m_inited(false) {}
 CGame* CGame::init() {
     CGame* game = new CGame();
 
-    game->m_window = SDL_CreateWindow("Almost Valorant", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+    game->m_window = SDL_CreateWindow(GAME_TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 
     if (game->m_window == nullptr) {
         std::cerr << "Window could not be created! SDL_Error:" << SDL_GetError() << std::endl;
@@ -73,6 +73,10 @@ void CGame::start() {
     MapLoad(m_systems, m_assets, "data/maps/first.json", m_map_name, m_entities);
     m_main_player = static_cast<CPlayer*>(m_entities.findEntitiesByName("player0")[0]);
     m_camera.followEntity(m_main_player, true);
+
+    for (auto entity : m_entities.getAllEntities()) {
+        entity->init(m_systems);
+    }
 }
 
 bool CGame::run() {

@@ -1,3 +1,4 @@
+#include <cmath>
 #include "World.h"
 
 CWorld::CWorld(CTileset &tileset, CImage& background, uint16_t width, uint16_t height) :
@@ -12,6 +13,10 @@ void CWorld::putTiles(const std::vector<uint16_t>& tiles) {
     m_tiles.assign(tiles.begin(), tiles.end());
 }
 
+void CWorld::init(TGameSystems systems) {
+    // No init (for now)
+}
+
 void CWorld::logic(double dt) {
     // No logic (for now)
 }
@@ -24,6 +29,21 @@ void CWorld::draw(CGraphics *graphics) {
         int x = (i % m_width) * sz;
         int y = (i / m_width) * sz;
 
-        graphics->drawImageSlice(m_tileset.getTile(m_tiles[i]), x, y, false);
+        graphics->drawImageSlice(m_tileset.getTileImageSlice(m_tiles[i]), x, y, false);
     }
+}
+
+#include <iostream>
+
+std::optional<ETileMaterial> CWorld::getTileMaterialAt(float x, float y) {
+    int tile_size = m_tileset.getSize();
+    int tileX = int(x) / tile_size - int(x >= -tile_size && x < 0.0);
+    int tileY = int(y) / tile_size - int(y >= -tile_size && y < 0.0);
+
+    if (tileX < 0 || tileX >= m_width) return std::nullopt;
+    if (tileY < 0 || tileY >= m_height) return std::nullopt;
+
+    int tileID = tileX + tileY * m_width;
+
+    return m_tileset.getMaterial(m_tiles[tileID]);
 }

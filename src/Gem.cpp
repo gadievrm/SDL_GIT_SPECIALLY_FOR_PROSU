@@ -7,16 +7,16 @@ CGem::CGem(TGameSystems systems) {
     CAssetManager *assets = systems.assets;
 
     for (int i = 1; i <= GEM_ANIM_IDLE_FRAMES; i++) {
-        sprintf(path, "data/gfx/sprites/gem/gem-%d.png", i);
-        m_frames[loadedFrame++] = static_cast<CImage*>(assets->fetchAsset(EAsset::Image, path));
+        sprintf(path, "sprites/gem/gem-%d.png", i);
+        m_frames[loadedFrame++] = assets->fetchImage(path);
     }
 
     for (int i = 1; i <= GEM_ANIM_PICKUP_FRAMES; i++) {
-        sprintf(path, "data/gfx/sprites/item-feedback/item-feedback-%d.png", i);
-        m_frames[loadedFrame++] = static_cast<CImage*>(assets->fetchAsset(EAsset::Image, path));
+        sprintf(path, "sprites/item-feedback/item-feedback-%d.png", i);
+        m_frames[loadedFrame++] = assets->fetchImage(path);
     }
 
-    m_pickup_sound = static_cast<CSound*>(assets->fetchAsset(EAsset::Sound, "data/sfx/pickup_bonus.wav"));
+    m_pickup_sound = assets->fetchSound("pickup-bonus.wav");
 
     m_pickup_time = 0;
     m_picked_up = false;
@@ -31,6 +31,10 @@ static int getCurrentFrame(double game_time, bool picked_up, double pickup_time)
     } else {
         return GEM_ANIM_IDLE_FRAMES + (((int) ((game_time - pickup_time) / GEM_ANIM_PICKUP_INTERVAL)) % GEM_ANIM_PICKUP_FRAMES);
     }
+}
+
+void CGem::init(TGameSystems systems) {
+    // Nothing (for now)
 }
 
 void CGem::logic(double dt) {

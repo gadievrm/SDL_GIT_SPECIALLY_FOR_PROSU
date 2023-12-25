@@ -3,7 +3,7 @@
 
 enum class ECameraMode {
     Entity,
-    Place
+    Point
 };
 
 class CCamera {

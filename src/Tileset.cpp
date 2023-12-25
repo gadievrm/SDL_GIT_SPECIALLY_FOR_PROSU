@@ -16,7 +16,7 @@ const std::string& CTileset::getName() const {
     return m_name;
 }
 
-image_slice_t CTileset::getTile(int tile) {
+image_slice_t CTileset::getTileImageSlice(int tile) {
     int tsw = m_img.getWidth();
     int sz = m_tile_size;
     int n_x = tsw / sz;
@@ -33,4 +33,10 @@ int CTileset::getSize() {
 
 void CTileset::setMaterial(int tile, ETileMaterial material) {
     m_materials[tile] = material;
+}
+
+std::optional<ETileMaterial> CTileset::getMaterial(int tile) {
+    if (tile < 0 || tile >= m_materials.size()) return std::nullopt;
+
+    return m_materials[tile];
 }

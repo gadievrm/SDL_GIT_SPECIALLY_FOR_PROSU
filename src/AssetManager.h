@@ -3,6 +3,8 @@
 #include <vector>
 #include <unordered_map>
 #include "Asset.h"
+#include "Audio.h"
+#include "Image.h"
 
 class CAssetManager;
 class IAssetLoader;
@@ -17,4 +19,6 @@ public:
     CAssetManager();
     void addLoader(IAssetLoader &loader);
     ACAsset* fetchAsset(EAsset type, const std::string &path);
+    CImage* fetchImage(const std::string &path);
+    CSound* fetchSound(const std::string &path);
 };

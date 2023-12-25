@@ -34,8 +34,8 @@ void MapLoad(TGameSystems systems, CAssetManager& assets, const std::string& pat
             std::cerr << "World size incorrect!" << std::endl;
             return;
         }
-        std::string bg_path = std::string("data/gfx/environment/bg/").append(jworld["background"]);
-        CImage *bg = static_cast<CImage*>(assets.fetchAsset(EAsset::Image, bg_path));
+        std::string bg_path = std::string("environment/bg/").append(jworld["background"]);
+        CImage *bg = assets.fetchImage(bg_path);
         CWorld* world = new CWorld(*tileset, *bg, ww, wh);
         world->putTiles(wtiles);
         entities.addEntityWithName("0world", *world);

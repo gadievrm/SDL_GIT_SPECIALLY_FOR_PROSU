@@ -24,7 +24,7 @@ ACAsset* CTilesetAssetLoader::loadAsset(CAssetManager &assets, const std::string
     std::ifstream f(path);
     json data = json::parse(f);
 
-    std::string tileset_file = std::string("data/gfx/environment/tilesets/").append(data["tileset_file"]);
+    std::string tileset_file = std::string("environment/tilesets/").append(data["tileset_file"]);
     std::string tileset_name = data["tileset_name"];
     int tile_size = data["tile_size"];
 
@@ -32,7 +32,7 @@ ACAsset* CTilesetAssetLoader::loadAsset(CAssetManager &assets, const std::string
     // std::cout << "tileset_name: " << tileset_name << std::endl;
     // std::cout << "tile_size: " << tile_size << std::endl;
 
-	CImage *tileset_image = static_cast<CImage*>(assets.fetchAsset(EAsset::Image, tileset_file));
+	CImage *tileset_image = assets.fetchImage(tileset_file);
     CTileset *tileset = new CTileset(path, *tileset_image, tileset_name, tile_size);
 
     json jmats = data["materials"];
@@ -46,8 +46,8 @@ ACAsset* CTilesetAssetLoader::loadAsset(CAssetManager &assets, const std::string
             ETileMaterial material = ETileMaterial::None;
             int tile = std::stoi(key);
 
-            if (value == "wall") {
-                material = ETileMaterial::Wall;
+            if (value == "stone") {
+                material = ETileMaterial::Stone;
             } else if (value == "panel") {
                 material = ETileMaterial::Panel;
             } else if (value == "dirt") {

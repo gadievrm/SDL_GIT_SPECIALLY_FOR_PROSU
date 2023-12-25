@@ -24,6 +24,7 @@ private:
 public:
     CGem(TGameSystems systems);
     void pickup();
+    void init(TGameSystems) override;
     void logic(double dt) override;
     void draw(CGraphics *graphics) override;
 };

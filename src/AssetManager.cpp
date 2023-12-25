@@ -20,6 +20,14 @@ ACAsset* CAssetManager::fetchAsset(EAsset type, const std::string& path) {
     return asset;
 }
 
+CSound* CAssetManager::fetchSound(const std::string& path) {
+    return static_cast<CSound*>(fetchAsset(EAsset::Sound, std::string("data/sfx/").append(path)));
+}
+
+CImage* CAssetManager::fetchImage(const std::string& path) {
+    return static_cast<CImage*>(fetchAsset(EAsset::Image, std::string("data/gfx/").append(path)));
+}
+
 CAssetManager::CAssetManager() :
 m_asset_loaders(int(EAsset::Count)) 
 {}

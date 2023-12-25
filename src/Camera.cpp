@@ -2,7 +2,7 @@
 #include "GameSetup.h"
 
 CCamera::CCamera() : 
-m_mode(ECameraMode::Place),
+m_mode(ECameraMode::Point),
 m_posX(0.0),
 m_posY(0.0),
 m_desiredX(0.0),
@@ -22,12 +22,12 @@ void CCamera::setPos(float x, float y) {
 }
 
 void CCamera::update(double dt) {
-    const float CAMERA_SMOOTH_FACTOR = 0.0072;
+    const float CAMERA_SMOOTH_FACTOR = 0.0042;
     float targetX;
     float targetY;
 
     switch (m_mode) {
-        case ECameraMode::Place:
+        case ECameraMode::Point:
             targetX = m_desiredX;
             targetY = m_desiredY;
             break;
@@ -59,7 +59,7 @@ void CCamera::followEntity(ACEntity *entity, bool smooth) {
 }
 
 void CCamera::lookAt(float x, float y, bool smooth) {
-    m_mode = ECameraMode::Place;
+    m_mode = ECameraMode::Point;
     m_desiredX = x;
     m_desiredY = y;
     m_smooth = smooth;
