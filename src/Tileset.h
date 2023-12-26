@@ -26,6 +26,7 @@ public:
     CTileset(std::optional<std::string> path, const CImage &image, const std::string& name, int tile_size);
     const std::string& getName() const;
     image_slice_t getTileImageSlice(int tile);
+    int getTileSize();
     int getSize();
     void setMaterial(int tile, ETileMaterial material);
     std::optional<ETileMaterial> getMaterial(int tile);

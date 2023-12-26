@@ -12,7 +12,7 @@ using nlohmann::json;
 
 #include <iostream>
 void MapLoad(TGameSystems systems, CAssetManager& assets, const std::string& path, std::string& name, CEntityManager& entities) {
-    json data = json::parse(std::ifstream(path));
+    json data = json::parse(std::ifstream(std::string("data/maps/").append(path)));
     json jworld;
     std::string tileset_path;
 

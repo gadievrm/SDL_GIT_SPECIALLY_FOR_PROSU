@@ -65,18 +65,125 @@ void CGame::start() {
     m_frametime_last = SDL_GetPerformanceCounter();
     m_performance_frequency = SDL_GetPerformanceFrequency();
 
-    // -----------------------------------------------------
-    // -----------------------------------------------------
-    //                     MAP LOADING
-    // -----------------------------------------------------
-    // -----------------------------------------------------
-    MapLoad(m_systems, m_assets, "data/maps/first.json", m_map_name, m_entities);
+    // startGaming();
+    startMapEditor();
+}
+
+void CGame::startMainMenu() {
+
+}
+
+void CGame::startGaming() {
+    m_state = EGameState::Gaming;
+    MapLoad(m_systems, m_assets, "first.json", m_map_name, m_entities);
     m_main_player = static_cast<CPlayer*>(m_entities.findEntitiesByName("player0")[0]);
     m_camera.followEntity(m_main_player, true);
 
     for (auto entity : m_entities.getAllEntities()) {
         entity->init(m_systems);
     }
+}
+
+void CGame::startMapEditor() {
+    m_state = EGameState::MapEditor;
+    MapLoad(m_systems, m_assets, "first.json", m_map_name, m_entities);
+    m_world = static_cast<CWorld*>(m_entities.findEntitiesByName("0world")[0]);
+    m_tileset = &m_world->getTileset();
+}
+
+void CGame::doMainMenu(double delta_time) {
+    m_state = EGameState::MainMenu;
+}
+
+void CGame::doGaming(double delta_time) {
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    //                      LOGIC
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    for (auto entity : m_entities.getAllEntities()) {
+        entity->logic(delta_time);
+    }
+    m_camera.update(delta_time);
+
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    //                       OUTPUT
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    float cameraX, cameraY;
+    m_camera.getPos(cameraX, cameraY);
+    m_graphics->setOffset(-cameraX, -cameraY);
+    for (auto entity : m_entities.getAllEntities()) {
+        entity->draw(m_graphics);
+    }
+}
+
+void CGame::doMapEditor(double delta_time) {
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    //                    USER INTERFACE
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    ImGui::Begin("Editor", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
+        ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_Once);
+        ImGui::SetWindowSize(ImVec2(0, SCREEN_HEIGHT), ImGuiCond_Once);
+        static int selected_tile = 0;
+        ImGui::BeginTable("EditorMenuTiles", 4, 0, ImVec2(0.0, 0.0), 0.0);
+        for (int i = 0; i < m_tileset->getSize(); i++) {
+            image_slice_t slice = m_tileset->getTileImageSlice(i);
+            float x = ((float) slice.x) / slice.image.getWidth();
+            float y = ((float) slice.y) / slice.image.getHeight();
+            float w = ((float) slice.w) / slice.image.getWidth();
+            float h = ((float) slice.h) / slice.image.getHeight();
+            bool selected = selected_tile == i;
+
+            if (i % 4 == 0) ImGui::TableNextRow();
+            ImGui::TableNextColumn();
+            bool chosen = 
+            ImGui::ImageButton(
+                std::string("tile_").append(std::to_string(i)).c_str(),
+                slice.image.getTexture(),
+                ImVec2(slice.w, slice.h),
+                ImVec2(x, y),
+                ImVec2(x + w, y + h),
+                ImVec4(0, 0, 0, 0),
+                ImVec4(1, 1, selected ? 0.2 : 1, 1.0)
+            );
+
+            if (chosen) selected_tile = i;
+        }
+        ImGui::EndTable();
+    ImGui::End();
+
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    //                        LOGIC
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    float cameraX, cameraY;
+    m_camera.getPos(cameraX, cameraY);
+    int selected_tile_x = cameraX + m_input.getMouseX();
+    int selected_tile_y = cameraY + m_input.getMouseY();
+    m_world->convertToTileCoords(selected_tile_x, selected_tile_y);
+    if (m_input.getHeld(EKey::MouseLeft)) {
+        m_world->setTile(selected_tile_x, selected_tile_y, selected_tile);
+    }
+
+    m_camera.editor_update(m_systems);
+    m_camera.update(delta_time);
+
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    //                       OUTPUT
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    m_graphics->setOffset(-cameraX, -cameraY);
+    for (auto entity : m_entities.getAllEntities()) {
+        entity->draw(m_graphics);
+    }
+
+    m_world->drawTileInWorld(m_graphics, selected_tile, selected_tile_x, selected_tile_y);
 }
 
 bool CGame::run() {
@@ -106,6 +213,7 @@ bool CGame::run() {
     //                        INPUT
     // -----------------------------------------------------
     // -----------------------------------------------------
+    m_input.update();
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
         m_debug_ui->handleEvent(e);
@@ -126,26 +234,16 @@ bool CGame::run() {
         }
     }
 
-    // -----------------------------------------------------
-    // -----------------------------------------------------
-    //                      LOGIC
-    // -----------------------------------------------------
-    // -----------------------------------------------------
-    for (auto entity : m_entities.getAllEntities()) {
-        entity->logic(delta_time);
-    }
-    m_camera.update(delta_time);
-
-    // -----------------------------------------------------
-    // -----------------------------------------------------
-    //                       OUTPUT
-    // -----------------------------------------------------
-    // -----------------------------------------------------
-    float cameraX, cameraY;
-    m_camera.getPos(cameraX, cameraY);
-    m_graphics->setOffset(-cameraX, -cameraY);
-    for (auto entity : m_entities.getAllEntities()) {
-        entity->draw(m_graphics);
+    switch (m_state) {
+        case EGameState::MainMenu:
+            doMainMenu(delta_time);
+            break;
+        case EGameState::MapEditor:
+            doMapEditor(delta_time);
+            break;
+        case EGameState::Gaming:
+            doGaming(delta_time);
+            break;
     }
 
     m_graphics->removeScaling();

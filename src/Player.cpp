@@ -83,12 +83,12 @@ void CPlayer::logic(double dt) {
     const float SPEEDUP       = 0.8;
     static const float isqrt2 = 1.0 / sqrtf(2);
 
-    bool running = m_input->getShiftKeyPressed();
+    bool running = m_input->getHeld(EKey::Shift);
     float multiplier = 1 + SPEEDUP * (running ? 1 : 0);
     float tomove = ACCELERATION * multiplier * dt;
 
-    int hor = int(m_input->getDKeyPressed()) - int(m_input->getAKeyPressed());
-    int ver = int(m_input->getSKeyPressed()) - int(m_input->getWKeyPressed());
+    int hor = int(m_input->getHeld(EKey::D)) - int(m_input->getHeld(EKey::A));
+    int ver = int(m_input->getHeld(EKey::S)) - int(m_input->getHeld(EKey::W));
 
     float moveX = hor * tomove;
     float moveY = ver * tomove;

@@ -21,6 +21,7 @@ public:
     void setPos(float x, float y);
     void getPos(float &x, float &y);
     void update(double dt);
+    void editor_update(TGameSystems systems);
 
     void followEntity(ACEntity *entity, bool smooth);
     void lookAt(float x, float y, bool smooth);

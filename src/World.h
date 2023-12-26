@@ -18,5 +18,11 @@ public:
     void init(TGameSystems systems) override;
     void logic(double dt) override;
     void draw(CGraphics *graphics) override;
+    void convertToTileCoords(int &x, int &y);
+    void drawTileInWorld(CGraphics *graphics, int tile, int x, int y);
+    void setTile(int x, int y, int tile);
+    int getTile(int x, int y);
+    int getTileSize();
     std::optional<ETileMaterial> getTileMaterialAt(float x, float y);
+    CTileset& getTileset();
 };

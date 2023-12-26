@@ -28,6 +28,10 @@ image_slice_t CTileset::getTileImageSlice(int tile) {
 }
 
 int CTileset::getSize() {
+    return m_materials.size();
+}
+
+int CTileset::getTileSize() {
     return m_tile_size;
 }
 
