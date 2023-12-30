@@ -1,6 +1,6 @@
 #include "Audio.h"
 
-CSound::CSound(std::optional<std::string> path, Mix_Chunk *chunk) : m_chunk(chunk)
+CSound::CSound(std::optional<std::filesystem::path> path, Mix_Chunk *chunk) : m_chunk(chunk)
 {
     m_type = EAsset::Sound;
     m_path = path;
@@ -24,8 +24,8 @@ CAudio *CAudio::init() {
     return audio;
 }
 
-CSound *CAudio::loadSound(const char *path) {
-    CSound *sound = new CSound(path, Mix_LoadWAV(path));
+CSound *CAudio::loadSound(const std::filesystem::path& path) {
+    CSound *sound = new CSound(path, Mix_LoadWAV(path.string().c_str()));
     return sound;
 }
 

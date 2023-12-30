@@ -14,17 +14,17 @@ EAsset CTilesetAssetLoader::getType() const {
     return EAsset::Tileset;
 }
 
-bool CTilesetAssetLoader::doesPathMatch(const std::string& path) const {
+bool CTilesetAssetLoader::doesPathMatch(const std::filesystem::path& path) const {
     // TODO: Fix
     return true;
 }
 
 #include <iostream>
-ACAsset* CTilesetAssetLoader::loadAsset(CAssetManager &assets, const std::string& path) {
+ACAsset* CTilesetAssetLoader::loadAsset(CAssetManager &assets, const std::filesystem::path& path) {
     std::ifstream f(path);
     json data = json::parse(f);
 
-    std::string tileset_file = std::string("environment/tilesets/").append(data["tileset_file"]);
+    std::string tileset_file = std::string("env/tilesets/").append(data["tileset_file"]);
     std::string tileset_name = data["tileset_name"];
     int tile_size = data["tile_size"];
 
@@ -46,15 +46,7 @@ ACAsset* CTilesetAssetLoader::loadAsset(CAssetManager &assets, const std::string
             ETileMaterial material = ETileMaterial::None;
             int tile = std::stoi(key);
 
-            if (value == "stone") {
-                material = ETileMaterial::Stone;
-            } else if (value == "panel") {
-                material = ETileMaterial::Panel;
-            } else if (value == "dirt") {
-                material = ETileMaterial::Dirt;
-            } else if (value == "wood") {
-                material = ETileMaterial::Wood;
-            }
+            material = StringToTileMaterial(value.c_str());
 
             tileset->setMaterial(tile, material);
         }

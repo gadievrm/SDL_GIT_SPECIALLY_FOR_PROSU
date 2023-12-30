@@ -1,6 +1,6 @@
 #include "Image.h"
 
-CImage::CImage(std::optional<std::string> path, SDL_Texture *texture, int width, int height) {
+CImage::CImage(std::optional<std::filesystem::path> path, SDL_Texture *texture, int width, int height) {
     m_path = path;
     m_texture = texture;
     m_width = width;

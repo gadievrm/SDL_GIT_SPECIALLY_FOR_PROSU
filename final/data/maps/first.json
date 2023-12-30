@@ -1,6 +1,6 @@
 {
 	"name": "First map",
-	
+
 	"world": {
 		"size": [20, 20],
 		"tileset": "aztec",

@@ -1,26 +1,33 @@
 #include <SDL.h>
 #include "Entity.h"
 
+ACEntity::ACEntity(const std::string& class_name) : m_class_name(class_name), m_name(std::nullopt), m_posX(0.0f), m_posY(0.0f)
+{}
+
 float ACEntity::getPosX() {
-    return this->posX;
+    return m_posX;
 }
 
 float ACEntity::getPosY() {
-    return this->posY;
+    return m_posY;
 }
 
 void ACEntity::setPosX(float new_posX) {
-    this->posX = new_posX;
+    m_posX = new_posX;
 }
 
 void ACEntity::setPosY(float new_posY) {
-    this->posY = new_posY;
+    m_posY = new_posY;
 }
 
-std::string ACEntity::getName() {
-    return this->name;
+std::optional<std::string> ACEntity::getName() {
+    return m_name;
 }
 
-void ACEntity::setName(std::string new_name) {
-    this->name = new_name;
+void ACEntity::setName(const std::string& new_name) {
+    m_name = new_name;
+}
+
+const std::string& ACEntity::getClassName() {
+    return m_class_name;
 }

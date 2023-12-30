@@ -8,7 +8,7 @@ class CSound : public ACAsset {
 private:
     Mix_Chunk *m_chunk;
 public:
-    CSound(std::optional<std::string>, Mix_Chunk *chunk);
+    CSound(std::optional<std::filesystem::path>, Mix_Chunk *chunk);
     Mix_Chunk *getChunk();
 };
 
@@ -17,6 +17,6 @@ private:
     CAudio() = default;
 public:
     static CAudio *init();
-    CSound *loadSound(const char *path);
+    CSound *loadSound(const std::filesystem::path& path);
     void playSound(CSound *sound);
 };

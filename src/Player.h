@@ -39,6 +39,8 @@ private:
     void doStepLogic(float tomove, bool running);
 
 public:
+    static inline const std::string CLASS_NAME = "player";
+
     CPlayer(TGameSystems systems);
 
     bool getFlipX();

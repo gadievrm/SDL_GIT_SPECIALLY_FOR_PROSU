@@ -56,6 +56,7 @@ void CCamera::update(double dt) {
 void CCamera::editor_update(TGameSystems systems) {
     CInput *input = systems.input;
     const float SPEED = 1.5;
+    float fast = 1 + input->getHeld(EKey::Shift) * 5;
 
     int hor = input->getHeld(EKey::D) - input->getHeld(EKey::A);
     int ver = input->getHeld(EKey::S) - input->getHeld(EKey::W);
@@ -63,8 +64,8 @@ void CCamera::editor_update(TGameSystems systems) {
     float moveX = hor * SPEED;
     float moveY = ver * SPEED;
 
-    m_desiredX += moveX;
-    m_desiredY += moveY;
+    m_desiredX += moveX * fast;
+    m_desiredY += moveY * fast;
 }
 
 void CCamera::followEntity(ACEntity *entity, bool smooth) {

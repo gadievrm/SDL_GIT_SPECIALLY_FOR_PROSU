@@ -6,6 +6,6 @@ class CSoundAssetLoader : public IAssetLoader {
 public:
     CSoundAssetLoader() = default;
     EAsset getType() const override;
-    bool doesPathMatch(const std::string& path) const override;
-    ACAsset* loadAsset(CAssetManager &assets, const std::string& path) override;
+    bool doesPathMatch(const std::filesystem::path& path) const override;
+    ACAsset* loadAsset(CAssetManager &assets, const std::filesystem::path& path) override;
 };

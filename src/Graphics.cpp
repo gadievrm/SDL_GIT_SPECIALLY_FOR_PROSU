@@ -40,7 +40,7 @@ void CGraphics::drawImageAtScale(CImage *image, int posX, int posY, int w, int h
 	SDL_RenderCopyEx(m_renderer, image->getTexture(), NULL, &dest_rect, 0, NULL, flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 }
 
-void CGraphics::drawImageSlice(image_slice_t image_slice, int posX, int posY, bool flip) {
+void CGraphics::drawImageSlice(image_islice_t image_slice, int posX, int posY, bool flip) {
 	const CImage& image = image_slice.image;
 
 	SDL_Rect src_rect {.x = image_slice.x, .y = image_slice.y, .w = image_slice.w, .h = image_slice.h};

@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <optional>
+#include <filesystem>
 
 enum class EAsset {
     Sound = 0,
@@ -15,9 +16,9 @@ enum class EAsset {
 class ACAsset {
 protected:
     EAsset m_type;
-    std::optional<std::string> m_path;
+    std::optional<std::filesystem::path> m_path;
     
 public:
-    const EAsset getType();
-    const std::optional<std::string>& getPath();
+    const EAsset getType() const;
+    const std::optional<std::filesystem::path>& getPath() const;
 };

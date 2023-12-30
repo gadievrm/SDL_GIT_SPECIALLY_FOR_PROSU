@@ -1,4 +1,6 @@
 #pragma once
+struct TGameSystems;
+
 #include "Input.h"
 #include "Graphics.h"
 #include "Audio.h"

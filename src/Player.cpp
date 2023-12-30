@@ -1,11 +1,12 @@
 #include <cmath>
 #include "Player.h"
 #include "Input.h"  // Добавлен новый заголовочный файл - It s a basic Artem
+#include "Console.h"
 
 const int PLAYER_WIDTH  = 20;
 const int PLAYER_HEIGHT = 23;
 
-CPlayer::CPlayer(TGameSystems systems) {
+CPlayer::CPlayer(TGameSystems systems) : ACEntity(CPlayer::CLASS_NAME) {
     // Systems
     m_input = systems.input;
     m_audio = systems.audio;
@@ -65,7 +66,7 @@ CPlayer::CPlayer(TGameSystems systems) {
 
 void CPlayer::init(TGameSystems systems) {
     // Entities
-    m_world = static_cast<CWorld*>(systems.entities->findEntitiesByName("0world")[0]);
+    m_world = static_cast<CWorld*>(systems.entities->findByName("0world")[0]);
 }
 
 bool CPlayer::getFlipX() {
@@ -158,6 +159,7 @@ void CPlayer::doStepLogic(float has_moved, bool running) {
     if (steps != nullptr && m_step_phase >= 1.0f) {
         m_to_step %= steps->size();
         m_audio->playSound((*steps)[m_to_step++]);
+        gConsole.info("(Player) step!\n");
     }
     
     m_step_phase -= floorf(m_step_phase); // Cycle

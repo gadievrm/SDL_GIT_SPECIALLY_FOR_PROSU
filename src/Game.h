@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL.h>
+#include <filesystem>
 #include <vector>
 #include "Graphics.h"
 #include "Audio.h"
@@ -34,6 +35,7 @@ private:
 
     // Game-specific stuff
     std::string m_map_name;
+    std::filesystem::path m_map_path;
     CPlayer* m_main_player;
     CCamera m_camera;
     CWorld* m_world;
@@ -52,6 +54,7 @@ private:
     Uint64 m_frametime_last;
     Uint64 m_performance_frequency;
 
+    void loadMap(const std::filesystem::path& map_path);
     void startMainMenu();
     void startGaming();
     void startMapEditor();

@@ -59,6 +59,7 @@
         "iomanip": "cpp",
         "sstream": "cpp",
         "valarray": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "list": "cpp"
     }
 }

@@ -7,15 +7,15 @@ EAsset CImageAssetLoader::getType() const {
     return EAsset::Image;
 }
 
-bool CImageAssetLoader::doesPathMatch(const std::string& path) const {
+bool CImageAssetLoader::doesPathMatch(const std::filesystem::path& path) const {
     // TODO: CHANGE
     return false;
 }
 
-ACAsset* CImageAssetLoader::loadAsset(CAssetManager &assets, const std::string& path) {
+ACAsset* CImageAssetLoader::loadAsset(CAssetManager &assets, const std::filesystem::path& path) {
     SDL_Texture *texture;
 	SDL_Surface *surface = NULL;
-	surface = IMG_Load(path.c_str());
+	surface = IMG_Load(path.string().c_str());
 
 	if (surface == NULL) {
 		return NULL;

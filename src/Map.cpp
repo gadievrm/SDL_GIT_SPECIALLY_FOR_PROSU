@@ -4,6 +4,8 @@
 #include <vector>
 #include <fstream>
 #include <json.h>
+#include <filesystem>
+namespace fs = std::filesystem;
 using nlohmann::json;
 
 #include "Player.h"
@@ -11,34 +13,34 @@ using nlohmann::json;
 
 
 #include <iostream>
-void MapLoad(TGameSystems systems, CAssetManager& assets, const std::string& path, std::string& name, CEntityManager& entities) {
-    json data = json::parse(std::ifstream(std::string("data/maps/").append(path)));
+void MapLoad(TGameSystems systems, CAssetManager& assets, const fs::path& path, std::string& name, CEntityManager& entities) {
+    json data = json::parse(std::ifstream(fs::path("data/maps") / path));
     json jworld;
-    std::string tileset_path;
+    fs::path tileset_path;
 
     CTileset *tileset;
 
     name = data["name"];
     jworld = data["world"];
 
-    tileset_path = std::string("data/gfx/environment/tilesets/").append(jworld["tileset"]).append(".json");
+    tileset_path = fs::path("data/gfx/env/tilesets") / (std::string(jworld["tileset"]) + std::string(".json"));
     tileset = static_cast<CTileset*>(assets.fetchAsset(EAsset::Tileset, tileset_path));
 
     // World loading
     {
         json jsize = jworld["size"];
         std::vector<uint16_t> wtiles = jworld["tiles"];
-        int wh = jsize[0];
-        int ww = jsize[1];
-        if (wtiles.size() != wh*ww) {
+        int ww = jsize[0];
+        int wh = jsize[1];
+        if (wtiles.size() != ww*wh) {
             std::cerr << "World size incorrect!" << std::endl;
             return;
         }
-        std::string bg_path = std::string("environment/bg/").append(jworld["background"]);
+        fs::path bg_path = fs::path("env/bg") / (std::string(jworld["background"]));
         CImage *bg = assets.fetchImage(bg_path);
         CWorld* world = new CWorld(*tileset, *bg, ww, wh);
         world->putTiles(wtiles);
-        entities.addEntityWithName("0world", *world);
+        entities.addWithName("0world", *world);
     }
 
     // Entity loading
@@ -67,9 +69,53 @@ void MapLoad(TGameSystems systems, CAssetManager& assets, const std::string& pat
 
         json jname = jent["name"];
         if (jname.type() == json::value_t::string) {
-            entities.addEntityWithName(jname, *ent);
+            entities.addWithName(jname, *ent);
         } else {
-            entities.addEntity(*ent);
+            entities.add(*ent);
         }
     }
+
+    // MapSave(systems, assets, path, name, entities);
+}
+
+void MapSave(TGameSystems systems, CAssetManager &assets, const std::filesystem::path& path, const std::string& name, CEntityManager& entities) {
+    json jmap, jworld, jentities;
+    
+    CWorld *world = static_cast<CWorld*>(entities.findByName("0world")[0]);
+    jworld["tileset"] = world->getTileset().getPath().value().stem();
+    jworld["background"] = world->getBackgroundImage().getPath().value().filename();
+    jworld["size"] = {world->getWidth(), world->getHeight()};
+    jworld["tiles"] = world->getAllTiles();
+
+    jentities = json::array();
+    for (auto ent : entities.getAll()) {
+        json jent;
+        const std::string& class_name = ent->getClassName();
+        if (class_name == CWorld::CLASS_NAME) {
+            continue;
+        }
+        // else if (class_name == CPlayer::CLASS_NAME) {
+            
+        // }
+        // else if (class_name == CGem::CLASS_NAME) {
+
+        // }
+
+        auto maybe_name = ent->getName();
+        if (maybe_name.has_value()) {
+            jent["name"] = maybe_name.value();
+        }
+        jent["class"] = class_name;
+        jent["pos"] = {ent->getPosX(), ent->getPosY()};
+        jentities.push_back(jent);
+    }
+
+    jmap["world"] = jworld;
+    jmap["entities"] = jentities;
+    jmap["name"] = name;
+    std::string data_to_write = jmap.dump(4);
+    std::cout << "MapSave === " << data_to_write << std::endl;
+
+    std::ofstream f(fs::path("data/maps") / path);
+    f.write(data_to_write.c_str(), data_to_write.size());
 }

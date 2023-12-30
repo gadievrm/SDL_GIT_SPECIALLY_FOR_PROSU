@@ -22,6 +22,8 @@ private:
     bool m_picked_up;
     double m_game_time;
 public:
+    static inline const std::string CLASS_NAME = "item_gem";
+
     CGem(TGameSystems systems);
     void pickup();
     void init(TGameSystems) override;

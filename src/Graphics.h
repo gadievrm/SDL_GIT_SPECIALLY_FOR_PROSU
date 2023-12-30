@@ -19,7 +19,7 @@ class CGraphics {
 		void drawImage(CImage* image, int posX, int posY, bool flip = false);
 		void drawImageScaled(CImage* image, int posX, int posY, double w, double h, bool flip);
 		void drawImageAtScale(CImage* image, int posX, int posY, int w, int h, bool flip);
-		void drawImageSlice(image_slice_t image_slice, int posX, int posY, bool flip);
+		void drawImageSlice(image_islice_t image_slice, int posX, int posY, bool flip);
 		void present();
 		SDL_Renderer *getRenderer();
 

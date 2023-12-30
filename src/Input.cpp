@@ -5,7 +5,8 @@ CInput::CInput() :
 m_last {},
 m_now {},
 m_mouse_x(0.0f),
-m_mouse_y(0.0f)
+m_mouse_y(0.0f),
+m_mouse_z(0.0f)
 {}
 
 static std::optional<EKey> keyFromScancode(SDL_Event& e) {
@@ -19,9 +20,19 @@ static std::optional<EKey> keyFromScancode(SDL_Event& e) {
                 return EKey::S;
             case SDL_SCANCODE_D:
                 return EKey::D;
+            case SDL_SCANCODE_E:
+                return EKey::E;
             case SDL_SCANCODE_LSHIFT:
             case SDL_SCANCODE_RSHIFT:
                 return EKey::Shift;
+            case SDL_SCANCODE_LCTRL:
+            case SDL_SCANCODE_RCTRL:
+                return EKey::Ctrl;
+            case SDL_SCANCODE_LALT:
+            case SDL_SCANCODE_RALT:
+                return EKey::Alt;
+            case SDL_SCANCODE_GRAVE:
+                return EKey::Tilde;
             default:
                 return std::nullopt;
         }
@@ -32,6 +43,8 @@ static std::optional<EKey> keyFromScancode(SDL_Event& e) {
                 return EKey::MouseLeft;
             case SDL_BUTTON_RIGHT:
                 return EKey::MouseRight;
+            case SDL_BUTTON_MIDDLE:
+                return EKey::MouseMiddle;
             default:
                 return std::nullopt;
         }

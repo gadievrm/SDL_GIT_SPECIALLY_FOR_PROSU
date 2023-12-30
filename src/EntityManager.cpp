@@ -1,16 +1,16 @@
 #include "EntityManager.h"
 
-void CEntityManager::addEntityWithName(const std::string& tag, ACEntity& entity) {
+void CEntityManager::addWithName(const std::string& tag, ACEntity& entity) {
     entity.setName(tag);
     m_entities.push_back(&entity);
     m_tags[tag].push_back(&entity);
 }
 
-void CEntityManager::addEntity(ACEntity &entity) {
+void CEntityManager::add(ACEntity &entity) {
     m_entities.push_back(&entity);
 }
 
-bool CEntityManager::removeEntity(ACEntity &entity) {
+bool CEntityManager::remove(ACEntity &entity) {
     bool removed = false;
     // Remove from m_entities
     for (auto it = m_entities.begin(); it != m_entities.end(); it++) {
@@ -35,14 +35,33 @@ bool CEntityManager::removeEntity(ACEntity &entity) {
     return removed;
 }
 
-void CEntityManager::removeEntitiesByName(const std::string &tag) {
-    m_tags.erase(tag);
+void CEntityManager::removeAll() {
+    m_tags.clear();
+
+    for (auto &ent : m_entities) {
+        delete ent;
+    }
+    m_entities.clear();
 }
 
-std::vector<ACEntity*>& CEntityManager::findEntitiesByName(const std::string &tag) {
+void CEntityManager::removeByName(const std::string& tag) {
+    m_tags.erase(tag);
+
+    for (auto it = m_entities.begin(); it != m_entities.end(); it++) {
+        if ((*it)->getName() != tag) continue;
+        m_entities.erase(it);
+        delete *it;
+    }
+}
+
+std::vector<ACEntity*>& CEntityManager::findByName(const std::string &tag) {
     return m_tags[tag];
 }
 
-const std::vector<ACEntity*>& CEntityManager::getAllEntities() {
+ACEntity* CEntityManager::findFirstByName(const std::string& tag) {
+    return m_tags[tag][0];
+}
+
+const std::vector<ACEntity*>& CEntityManager::getAll() {
     return m_entities;
 }

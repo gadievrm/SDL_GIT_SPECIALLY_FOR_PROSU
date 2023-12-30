@@ -6,13 +6,13 @@ EAsset CSoundAssetLoader::getType() const {
     return EAsset::Sound;
 }
 
-bool CSoundAssetLoader::doesPathMatch(const std::string& path) const {
+bool CSoundAssetLoader::doesPathMatch(const std::filesystem::path& path) const {
     // TODO: CHANGE
     return false;
 }
 
-ACAsset* CSoundAssetLoader::loadAsset(CAssetManager &assets, const std::string& path) {
-    Mix_Chunk *chunk = Mix_LoadWAV(path.c_str());
+ACAsset* CSoundAssetLoader::loadAsset(CAssetManager &assets, const std::filesystem::path& path) {
+    Mix_Chunk *chunk = Mix_LoadWAV(path.string().c_str());
 
 	// std::cout << "CSoundAssetLoader::loadAsset(\"" << path << "\");" << std::endl;
 

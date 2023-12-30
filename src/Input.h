@@ -6,9 +6,14 @@ enum class EKey {
     A,
     S,
     D,
+    E,
+    Tilde,
+    Ctrl,
+    Alt,
     Shift,
     MouseLeft,
     MouseRight,
+    MouseMiddle,
     Count
 };
 
@@ -18,6 +23,7 @@ private:
     bool m_now[int(EKey::Count)];
     float m_mouse_x;
     float m_mouse_y;
+    float m_mouse_z;
 
 public:
     CInput();
