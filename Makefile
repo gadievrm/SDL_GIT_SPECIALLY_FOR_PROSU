@@ -3,7 +3,8 @@
 ###############
 SOURCE_DIR  = src
 BUILD_DIR   = build
-INCLUDE_DIRS = -Iinclude/nlohmann -Iinclude/SDL2 -Iinclude/imgui
+INCLUDE_DIR_IMGUI = include/imgui
+INCLUDE_DIRS = -Iinclude/nlohmann -Iinclude/SDL2 -I$(INCLUDE_DIR_IMGUI)
 LIBRARY_DIR = lib
 
 ###############
@@ -13,6 +14,7 @@ TARGET = final/ingusheta
 OBJS = $(addprefix $(BUILD_DIR)/,$(notdir $(addsuffix .o,$(basename $(wildcard $(SOURCE_DIR)/*.cpp))))) # src/%.cpp > build/%.o
 OBJS += $(addprefix $(BUILD_DIR)/imgui/,$(notdir $(addsuffix .o,$(basename $(wildcard imgui/*.cpp)))))
 HEADERS = $(wildcard $(SOURCE_DIR)/*.h)
+HEADERS_IMGUI = $(wildcard $(INCLUDE_DIR_IMGUI)/*.h)
 ICON = extra/icon.res
 
 ###############
@@ -31,7 +33,7 @@ CFLAGS = $(INCLUDE_DIRS)
 $(BUILD_DIR)/%.o: $(SOURCE_DIR)/%.cpp $(HEADERS)
 	$(CPP) $(CFLAGS) -c $< -o $@
 
-$(BUILD_DIR)/imgui/%.o: imgui/%.cpp $(HEADERS)
+$(BUILD_DIR)/imgui/%.o: imgui/%.cpp $(HEADERS_IMGUI)
 	$(CPP) $(CFLAGS) -c $< -o $@
 
 #     Main    #
