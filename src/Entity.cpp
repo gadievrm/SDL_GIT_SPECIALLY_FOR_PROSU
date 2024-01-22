@@ -27,7 +27,3 @@ std::optional<std::string> ACEntity::getName() {
 void ACEntity::setName(const std::string& new_name) {
     m_name = new_name;
 }
-
-const std::string& ACEntity::getClassName() {
-    return m_class_name;
-}

@@ -4,6 +4,7 @@
 CInput::CInput() :
 m_last {},
 m_now {},
+m_mouse_focus(false),
 m_mouse_x(0.0f),
 m_mouse_y(0.0f),
 m_mouse_z(0.0f)
@@ -79,6 +80,10 @@ void CInput::update() {
     for (int i = 0; i < int(EKey::Count); i++) {
         m_last[i] = m_now[i];
     }
+}
+
+bool CInput::getMouseFocus() {
+    return m_mouse_focus;
 }
 
 float CInput::getMouseX() {

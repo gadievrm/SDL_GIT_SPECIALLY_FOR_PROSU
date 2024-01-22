@@ -12,13 +12,17 @@ class ACEntity {
 private:
     const std::string m_class_name;
     std::optional<std::string> m_name;
-    float m_posX;
-    float m_posY;
 
 protected:
     ACEntity(const std::string& class_name);
+    float m_posX;
+    float m_posY;
+    float m_widthX;
+    float m_widthY;
 
 public:
+    const std::string& class_name = m_class_name;
+
     float getPosX();
     float getPosY();
     void setPosX(float new_posX);
@@ -30,5 +34,4 @@ public:
 
     std::optional<std::string> getName();
     void setName(const std::string& new_name);
-    const std::string& getClassName();
 };

@@ -5,6 +5,7 @@
 #include "Audio.h"
 #include "Input.h"
 #include "GameSystems.h"
+#include "EntityEntries.h"
 
 #define GEM_ANIM_IDLE_FRAMES 5
 #define GEM_ANIM_IDLE_INTERVAL 100
@@ -23,8 +24,10 @@ private:
     double m_game_time;
 public:
     static inline const std::string CLASS_NAME = "item_gem";
+    static FEntityLoader Load;
+    static FEntitySaver Save;
 
-    CGem(TGameSystems systems);
+    CGem();
     void pickup();
     void init(TGameSystems) override;
     void logic(double dt) override;

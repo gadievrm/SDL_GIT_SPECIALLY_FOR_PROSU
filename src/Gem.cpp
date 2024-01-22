@@ -1,7 +1,47 @@
-#include <cstdio>
 #include "Gem.h"
 
-CGem::CGem(TGameSystems systems) : ACEntity(CGem::CLASS_NAME) {
+ACEntity* CGem::Load(std::optional<std::unordered_map<std::string, std::string>> options) {
+    float x, y;
+
+    if (options.has_value()) {
+        auto opts = options.value();
+        x = std::stof(opts["x"]);
+        y = std::stof(opts["y"]);
+    } else {
+        x = 0;
+        y = 0;
+    }
+
+    CGem *gem = new CGem();
+    gem->m_posX = x;
+    gem->m_posY = y;
+
+    return gem;
+}
+
+std::unordered_map<std::string, std::string> CGem::Save(ACEntity *ent) {
+    CGem *gem = static_cast<CGem*>(ent);
+    return {
+        {"x", std::to_string(gem->m_posX)},
+        {"y", std::to_string(gem->m_posY)}
+    };
+}
+
+CGem::CGem() : ACEntity(CGem::CLASS_NAME) {
+    m_pickup_time = 0;
+    m_picked_up = false;
+    m_game_time = 0;
+}
+
+static int getCurrentFrame(double game_time, bool picked_up, double pickup_time) {
+    if (!picked_up) {
+        return ((int) ((game_time) / GEM_ANIM_IDLE_INTERVAL)) % GEM_ANIM_IDLE_FRAMES;
+    } else {
+        return GEM_ANIM_IDLE_FRAMES + (((int) ((game_time - pickup_time) / GEM_ANIM_PICKUP_INTERVAL)) % GEM_ANIM_PICKUP_FRAMES);
+    }
+}
+
+void CGem::init(TGameSystems systems) {
     char path[256];
     int loadedFrame = 0;
     CAssetManager *assets = systems.assets;
@@ -17,24 +57,7 @@ CGem::CGem(TGameSystems systems) : ACEntity(CGem::CLASS_NAME) {
     }
 
     m_pickup_sound = assets->fetchSound("pickup-bonus.wav");
-
-    m_pickup_time = 0;
-    m_picked_up = false;
-    m_game_time = 0;
-
     m_audio = systems.audio;
-}
-
-static int getCurrentFrame(double game_time, bool picked_up, double pickup_time) {
-    if (!picked_up) {
-        return ((int) ((game_time) / GEM_ANIM_IDLE_INTERVAL)) % GEM_ANIM_IDLE_FRAMES;
-    } else {
-        return GEM_ANIM_IDLE_FRAMES + (((int) ((game_time - pickup_time) / GEM_ANIM_PICKUP_INTERVAL)) % GEM_ANIM_PICKUP_FRAMES);
-    }
-}
-
-void CGem::init(TGameSystems systems) {
-    // Nothing (for now)
 }
 
 void CGem::logic(double dt) {
@@ -46,7 +69,7 @@ void CGem::draw(CGraphics *graphics) {
 
     double size = 2.0 - 1.0 * m_picked_up;
 
-    graphics->drawImageScaled(m_frames[getCurrentFrame(m_game_time, m_picked_up, m_pickup_time)], getPosX(), getPosY(), size, size, false);
+    graphics->drawImageScaled(m_frames[getCurrentFrame(m_game_time, m_picked_up, m_pickup_time)], m_posX, m_posY, size, size, false);
 }
 
 void CGem::pickup() {

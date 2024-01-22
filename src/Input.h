@@ -21,6 +21,7 @@ class CInput {
 private:
     bool m_last[int(EKey::Count)];
     bool m_now[int(EKey::Count)];
+    bool m_mouse_focus;
     float m_mouse_x;
     float m_mouse_y;
     float m_mouse_z;
@@ -40,6 +41,7 @@ public:
     // Key was just pressed
     bool getPressed(EKey key);
 
+    bool getMouseFocus();
     float getMouseX();
     float getMouseY();
 };

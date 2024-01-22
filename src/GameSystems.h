@@ -6,6 +6,7 @@ struct TGameSystems;
 #include "Audio.h"
 #include "EntityManager.h"
 #include "AssetManager.h"
+#include "Physics.h"
 
 struct TGameSystems {
     CInput *input;
@@ -13,4 +14,5 @@ struct TGameSystems {
     CAudio *audio;
     CEntityManager *entities;
     CAssetManager *assets;
+    CPhysics *physics;
 };

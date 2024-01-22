@@ -46,26 +46,8 @@ void MapLoad(TGameSystems systems, CAssetManager& assets, const fs::path& path, 
     // Entity loading
     for (json jent : data["entities"]) {
         std::string class_name = jent["class"];
-        ACEntity *ent;
 
-        if (class_name == "player") {
-            json jpos = jent["pos"];
-            CPlayer *player = new CPlayer(systems);
-            player->setPosX(jpos[0]);
-            player->setPosY(jpos[1]);
-
-            ent = player;
-        } else if (class_name == "item_gem") {
-            json jpos = jent["pos"];
-            CGem *gem = new CGem(systems);
-            gem->setPosX(jpos[0]);
-            gem->setPosY(jpos[1]);
-
-            ent = gem;
-        } else {
-            std::cerr << "UNKNOWN CLASS NAME! (" << class_name << ")" << std::endl;
-            continue;
-        }
+        ACEntity *ent = gEnts[class_name].load(jent);
 
         json jname = jent["name"];
         if (jname.type() == json::value_t::string) {
@@ -74,14 +56,12 @@ void MapLoad(TGameSystems systems, CAssetManager& assets, const fs::path& path, 
             entities.add(*ent);
         }
     }
-
-    // MapSave(systems, assets, path, name, entities);
 }
 
 void MapSave(TGameSystems systems, CAssetManager &assets, const std::filesystem::path& path, const std::string& name, CEntityManager& entities) {
     json jmap, jworld, jentities;
     
-    CWorld *world = static_cast<CWorld*>(entities.findByName("0world")[0]);
+    CWorld *world = static_cast<CWorld*>(entities.findFirstByName("0world"));
     jworld["tileset"] = world->getTileset().getPath().value().stem();
     jworld["background"] = world->getBackgroundImage().getPath().value().filename();
     jworld["size"] = {world->getWidth(), world->getHeight()};
@@ -90,23 +70,18 @@ void MapSave(TGameSystems systems, CAssetManager &assets, const std::filesystem:
     jentities = json::array();
     for (auto ent : entities.getAll()) {
         json jent;
-        const std::string& class_name = ent->getClassName();
+        const std::string& class_name = ent->class_name;
         if (class_name == CWorld::CLASS_NAME) {
             continue;
         }
-        // else if (class_name == CPlayer::CLASS_NAME) {
-            
-        // }
-        // else if (class_name == CGem::CLASS_NAME) {
 
-        // }
+        jent = gEnts[class_name].save(ent);
 
         auto maybe_name = ent->getName();
         if (maybe_name.has_value()) {
             jent["name"] = maybe_name.value();
         }
         jent["class"] = class_name;
-        jent["pos"] = {ent->getPosX(), ent->getPosY()};
         jentities.push_back(jent);
     }
 
@@ -114,7 +89,6 @@ void MapSave(TGameSystems systems, CAssetManager &assets, const std::filesystem:
     jmap["entities"] = jentities;
     jmap["name"] = name;
     std::string data_to_write = jmap.dump(4);
-    std::cout << "MapSave === " << data_to_write << std::endl;
 
     std::ofstream f(fs::path("data/maps") / path);
     f.write(data_to_write.c_str(), data_to_write.size());

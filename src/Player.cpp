@@ -6,7 +6,48 @@
 const int PLAYER_WIDTH  = 20;
 const int PLAYER_HEIGHT = 23;
 
-CPlayer::CPlayer(TGameSystems systems) : ACEntity(CPlayer::CLASS_NAME) {
+ACEntity* CPlayer::Load(std::optional<std::unordered_map<std::string, std::string>> options) {
+    float x, y;
+
+    if (options.has_value()) {
+        auto opts = options.value();
+        x = std::stof(opts["x"]);
+        y = std::stof(opts["y"]);
+    } else {
+        x = 0;
+        y = 0;
+    }
+
+    CPlayer *player = new CPlayer();
+    player->m_posX = x;
+    player->m_posY = y;
+
+    return player;
+}
+
+std::unordered_map<std::string, std::string> CPlayer::Save(ACEntity *ent) {
+    CPlayer *player = static_cast<CPlayer*>(ent);
+    return {
+        {"x", std::to_string(player->m_posX)},
+        {"y", std::to_string(player->m_posY)}
+    };
+}
+
+CPlayer::CPlayer() : ACEntity(CPlayer::CLASS_NAME) {
+    // State
+    // Важно ставить значения по-умолчанию
+    // Иначе в значениях перемненных - мусор - sure
+    m_velX = m_velY = 0.0;
+    m_flipX = false;
+
+    m_step_phase = 0.0;
+    m_walk_phase = 0.0;
+    m_to_step = 0;
+    m_time = 0.0;
+    m_last_walk = m_time;
+}
+
+void CPlayer::init(TGameSystems systems) {
     // Systems
     m_input = systems.input;
     m_audio = systems.audio;
@@ -50,21 +91,11 @@ CPlayer::CPlayer(TGameSystems systems) : ACEntity(CPlayer::CLASS_NAME) {
     m_steps_water.push_back(assets->fetchSound("steps/water-2.wav"));
     m_steps_water.push_back(assets->fetchSound("steps/water-3.wav"));
     m_steps_water.push_back(assets->fetchSound("steps/water-4.wav"));
+    m_steps_sand.push_back(assets->fetchSound("steps/sand-1.ogg"));
+    m_steps_sand.push_back(assets->fetchSound("steps/sand-2.ogg"));
+    m_steps_sand.push_back(assets->fetchSound("steps/sand-3.ogg"));
+    m_steps_sand.push_back(assets->fetchSound("steps/sand-4.ogg"));
 
-    // State
-    // Важно ставить значения по-умолчанию
-    // Иначе в значениях перемненных - мусор - sure
-    m_velX = m_velY = 0.0;
-    m_flipX = false;
-
-    m_step_phase = 0.0;
-    m_walk_phase = 0.0;
-    m_to_step = 0;
-    m_time = 0.0;
-    m_last_walk = m_time;
-}
-
-void CPlayer::init(TGameSystems systems) {
     // Entities
     m_world = static_cast<CWorld*>(systems.entities->findByName("0world")[0]);
 }
@@ -73,8 +104,6 @@ bool CPlayer::getFlipX() {
     return m_flipX;
 }
 
-
-#include <iostream>
 void CPlayer::logic(double dt) {
     m_time += dt;
 
@@ -106,8 +135,8 @@ void CPlayer::logic(double dt) {
     m_velX += moveX;
     m_velY += moveY;
 
-    setPosX(getPosX() + m_velX * dt);
-    setPosY(getPosY() + m_velY * dt);
+    m_posX += m_velX * dt;
+    m_posY += m_velY * dt;
 
     m_velX *= pow(RETENTION, dt);
     m_velY *= pow(RETENTION, dt);
@@ -132,7 +161,7 @@ void CPlayer::doStepLogic(float has_moved, bool running) {
     const float RUN_ADDER = 0.5;
     m_step_phase += has_moved * (STEP_MULTIPLIER + ((running ? 1 : 0) * RUN_ADDER)) ;
 
-    ETileMaterial mat = m_world->getTileMaterialAt(getPosX() + PLAYER_WIDTH/2, getPosY() + PLAYER_HEIGHT).value_or(ETileMaterial::Water);
+    ETileMaterial mat = m_world->getTileMaterialAt(m_posX + PLAYER_WIDTH/2, m_posY + PLAYER_HEIGHT).value_or(ETileMaterial::Water);
     decltype(m_steps_basic)* steps = NULL;
 
     switch (mat) {
@@ -154,6 +183,9 @@ void CPlayer::doStepLogic(float has_moved, bool running) {
         case ETileMaterial::Water:
             steps = &m_steps_water;
             break;
+        case ETileMaterial::Sand:
+            steps = &m_steps_sand;
+            break;
     }
 
     if (steps != nullptr && m_step_phase >= 1.0f) {
@@ -161,7 +193,7 @@ void CPlayer::doStepLogic(float has_moved, bool running) {
         m_audio->playSound((*steps)[m_to_step++]);
         gConsole.info("(Player) step!\n");
     }
-    
+
     m_step_phase -= floorf(m_step_phase); // Cycle
 }
 
@@ -173,5 +205,5 @@ void CPlayer::draw(CGraphics *graphics) {
         int frame = floorf(m_walk_phase * m_i_run.size()); 
         image = m_i_run[frame];
     }
-    graphics->drawImageAtScale(image, getPosX(), getPosY(), PLAYER_WIDTH, PLAYER_HEIGHT, m_flipX);
+    graphics->drawImageAtScale(image, m_posX, m_posY, PLAYER_WIDTH, PLAYER_HEIGHT, m_flipX);
 }

@@ -6,6 +6,7 @@
 #include "Audio.h"
 #include "GameSystems.h"
 #include "World.h"
+#include "EntityEntries.h"
 
 class CPlayer : public ACEntity {
 private:
@@ -22,6 +23,7 @@ private:
     std::vector<CSound*> m_steps_panel;
     std::vector<CSound*> m_steps_wood;
     std::vector<CSound*> m_steps_water;
+    std::vector<CSound*> m_steps_sand;
 
     // Entities
     CWorld *m_world;
@@ -40,8 +42,10 @@ private:
 
 public:
     static inline const std::string CLASS_NAME = "player";
+    static FEntityLoader Load;
+    static FEntitySaver Save;
 
-    CPlayer(TGameSystems systems);
+    CPlayer();
 
     bool getFlipX();
 

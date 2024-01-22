@@ -23,7 +23,7 @@ ICON = extra/icon.res
 CPP = g++
 LIBS = -L$(LIBRARY_DIR) -lSDL2Main -lSDL2_Mixer -lSDL2_Image -lSDL2
 LFLAGS = $(LIBS) $(ICON) # -mwindows ## To disable console
-CFLAGS = $(INCLUDE_DIRS)
+CFLAGS = $(INCLUDE_DIRS) -std=c++23
 
 ###############
 #### RULES ####

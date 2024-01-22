@@ -13,6 +13,10 @@
 #include "DebugUI.h"
 #include "Tileset.h"
 #include "Camera.h"
+#include "Physics.h"
+
+class CGame;
+#include "Editor.h"
 
 enum class EGameState {
     MainMenu,
@@ -21,6 +25,8 @@ enum class EGameState {
 };
 
 class CGame {
+    friend class CEditor;
+
 private:
     // VIDEO
     SDL_Window* m_window;
@@ -31,7 +37,11 @@ private:
     CInput m_input;
     CEntityManager m_entities;
     CAssetManager m_assets;
+    CPhysics m_physics;
     EGameState m_state;
+
+    // Stages
+    CEditor* m_editor;
 
     // Game-specific stuff
     std::string m_map_name;
@@ -60,7 +70,6 @@ private:
     void startMapEditor();
     void doMainMenu(double delta_time);
     void doGaming(double delta_time);
-    void doMapEditor(double delta_time);
 
     CGame();
 
